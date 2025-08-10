@@ -1,3 +1,37 @@
+.bg-auth {
+  background-image: url('/bg-auth.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f6f6f6;
+  position: relative;
+  overflow: hidden;
+}
+.bg-auth::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  animation: bg-auth-fadeout 2s ease forwards;
+}
+
+@keyframes bg-auth-fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+/* Auth background image utility */
+.bg-auth {
+  background-image: url('/bg-auth.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f6f6f6;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,19 +43,19 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 98%;
     --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
+    --card: 0 0% 98%;
     --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
+    --popover: 0 0% 98%;
     --popover-foreground: 0 0% 3.9%;
     --primary: 0 0% 9%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
+    --secondary: 0 0% 89%;
     --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
+    --muted: 0 0% 89%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
+    --accent: 0 0% 89%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -35,15 +69,23 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
 
-    --sidebar: #ddeeed;
-    --sidebar-background: #ddeeed;
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: #ddeeed;
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+    --sidebar: 210 7% 96%;
+    --sidebar-background: 210 7% 96%;
+    --sidebar-foreground: 0 0% 14.5%;
+    --sidebar-primary: 0 0% 20.5%;
+    --sidebar-primary-foreground: 180 22% 90%;
+    --sidebar-accent: 0 0% 92%;
+    --sidebar-accent-foreground: 0 0% 20.5%;
+    --sidebar-border: 0 0% 89%;
+    --sidebar-ring: 0 0% 70.8%;
+
+    --bg-success: 186 87% 18%;
+    --bg-warning: 33 100% 53%;
+    --bg-info: 236 48% 30%;
+
+    --text-success: 186 87% 18%;
+    --text-warning: 33 100% 53%;
+    --text-info: 236 48% 30%;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -71,15 +113,23 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
 
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-background: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.439 0 0);
+    --sidebar: 30 17% 5%;
+    --sidebar-background: 30 17% 5%;
+    --sidebar-foreground: 0 0% 98.5%;
+    --sidebar-primary: 264 24% 48.8%;
+    --sidebar-primary-foreground: 0 0% 98.5%;
+    --sidebar-accent: 0 0% 26.9%;
+    --sidebar-accent-foreground: 0 0% 98.5%;
+    --sidebar-border: 0 0% 98% / 10%;
+    --sidebar-ring: 0 0% 43.9%;
+
+    --bg-success: 186 87% 18%;
+    --bg-warning: 33 100% 53%;
+    --bg-info: 236 48% 30%;
+
+    --text-success: 186 87% 18%;
+    --text-warning: 33 100% 53%;
+    --text-info: 236 48% 30%;
   }
 }
 

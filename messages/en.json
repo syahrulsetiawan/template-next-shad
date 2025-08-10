@@ -10,6 +10,7 @@
   "LocaleSwitcher": {
     "de": "Deutsch",
     "en": "English",
+    "id": "Indonesian",
     "label": "Language"
   },
   "LoginPage": {
@@ -25,5 +26,278 @@
   },
   "ProfilePage": {
     "title": "Profile"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred. Please try again later.",
+    "httpError": {
+      "400": "Bad Request",
+      "401": "Unauthorized",
+      "403": "Forbidden",
+      "404": "Not Found",
+      "500": "Internal Server Error"
+    },
+    "httpMessage": {
+      "400": "The request could not be understood by the server due to malformed syntax.",
+      "401": "You are not authorized to access this resource.",
+      "403": "Access to this resource is forbidden.",
+      "404": "The requested resource could not be found.",
+      "500": "An unexpected error occurred on the server."
+    },
+    "errorMessage": {
+      "network": "Network error. Please check your internet connection.",
+      "server": "Server error. Please try again later.",
+      "validation": "Validation error. Please check your input."
+    },
+    "validation": {
+      "required": "This field is required.",
+      "minLength": "Minimum length is {min} characters.",
+      "maxLength": "Maximum length is {max} characters.",
+      "email": "Please enter a valid email address.",
+      "number": "Please enter a valid number.",
+      "size": "Size must be between {min} and {max}.",
+      "integer": "Please enter a valid integer.",
+      "unique": "This value must be unique.",
+      "boolean": "Please enter a valid boolean value.",
+      "stock-minimum": "Stock must be at least {min} units.",
+      "url": "Please enter a valid URL.",
+      "date": "Please enter a valid date.",
+      "time": "Please enter a valid time.",
+      "dateTime": "Please enter a valid date and time.",
+      "pattern": "Please match the requested format.",
+      "confirmation": "Are you sure you want to proceed?",
+      "success": "Operation completed successfully."
+    },
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "create": "Create",
+    "update": "Update",
+    "search": "Search",
+    "noResults": "No results found.",
+    "confirmDelete": "Are you sure you want to delete this item?",
+    "yes": "Yes",
+    "no": "No",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "reset": "Reset",
+    "select": "Select",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
+    "filter": "Filter",
+    "sort": "Sort",
+    "sortBy": "Sort by",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "actions": "Actions",
+    "details": "Details",
+    "status": "Status",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "createdBy": "Created By",
+    "updatedBy": "Updated By",
+    "noData": "No data available.",
+    "confirm": "Confirm",
+    "close": "Close",
+    "download": "Download",
+    "upload": "Upload",
+    "print": "Print",
+    "export": "Export",
+    "import": "Import",
+    "viewMore": "View More",
+    "viewLess": "View Less",
+    "help": "Help",
+    "contactSupport": "Contact Support"
+  },
+  "states": {
+    "draft": "Draft",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "active": "Active",
+    "inactive": "Inactive",
+    "archived": "Archived",
+    "deleted": "Deleted",
+    "inProgress": "In Progress",
+    "onHold": "On Hold",
+    "failed": "Failed",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info",
+    "loading": "Loading",
+    "partial-receipt": "Partial Receipt",
+    "full-receipt": "Full Receipt",
+    "return-requested": "Return Requested",
+    "return-approved": "Return Approved",
+    "return-rejected": "Return Rejected",
+    "return-completed": "Return Completed",
+    "return-in-progress": "Return In Progress",
+    "return-cancelled": "Return Cancelled",
+    "realized": "Realized",
+    "not-realized": "Not Realized",
+    "pending-approval": "Pending Approval",
+    "approved-by-supplier": "Approved by Supplier",
+    "rejected-by-supplier": "Rejected by Supplier",
+    "awaiting-payment": "Awaiting Payment",
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "partially-paid": "Partially Paid",
+    "overpaid": "Overpaid",
+    "underpaid": "Underpaid",
+    "overdue": "Overdue",
+    "under-review": "Under Review",
+    "under-investigation": "Under Investigation",
+    "resolved": "Resolved",
+    "escalated": "Escalated",
+    "not-applicable": "Not Applicable",
+    "not-started": "Not Started",
+    "in-review": "In Review",
+    "approved-by-manager": "Approved by Manager",
+    "rejected-by-manager": "Rejected by Manager",
+    "awaiting-feedback": "Awaiting Feedback",
+    "feedback-received": "Feedback Received",
+    "feedback-pending": "Feedback Pending",
+    "feedback-rejected": "Feedback Rejected",
+    "feedback-approved": "Feedback Approved",
+    "feedback-in-progress": "Feedback In Progress",
+    "feedback-completed": "Feedback Completed"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist."
+  },
+  "routes": {
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Overview of your activities and statistics.",
+      "route": "/dashboard"
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "View and edit your profile information.",
+      "route": "/profile"
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Manage your account settings.",
+      "route": "/settings"
+    },
+    "help": {
+      "title": "Help",
+      "description": "Get assistance and find answers to your questions.",
+      "route": "/help"
+    },
+    "procurements": {
+      "title": "Procurements",
+      "description": "Manage your procurement processes.",
+      "route": "/procurements",
+      "subRoutes": {
+        "procurement-request": {
+          "title": "Procurement Request",
+          "description": "Create and manage procurement requests.",
+          "route": "/procurements/request",
+          "subRoutes": {
+            "create": {
+              "title": "Create Request",
+              "description": "Create a new procurement request.",
+              "route": "/procurements/request/create"
+            },
+            "edit": {
+              "title": "Edit Request",
+              "description": "Edit an existing procurement request.",
+              "route": "/procurements/request/edit/:id"
+            },
+            "view": {
+              "title": "View Request",
+              "description": "View details of a procurement request.",
+              "route": "/procurements/request/view/:id"
+            }
+          }
+        },
+        "purchase-order": {
+          "title": "Purchase Order",
+          "description": "View and manage purchase orders.",
+          "route": "/procurements/order",
+          "subRoutes": {
+            "create": {
+              "title": "Create Order",
+              "description": "Create a new purchase order.",
+              "route": "/procurements/order/create"
+            },
+            "edit": {
+              "title": "Edit Order",
+              "description": "Edit an existing purchase order.",
+              "route": "/procurements/order/edit/:id"
+            },
+            "view": {
+              "title": "View Order",
+              "description": "View details of a purchase order.",
+              "route": "/procurements/order/view/:id"
+            }
+          }
+        },
+        "goods-receipt": {
+          "title": "Goods Receipt",
+          "description": "Record the receipt of goods.",
+          "route": "/procurements/receipt",
+          "subRoutes": {
+            "create": {
+              "title": "Create Receipt",
+              "description": "Create a new goods receipt.",
+              "route": "/procurements/receipt/create"
+            },
+            "edit": {
+              "title": "Edit Receipt",
+              "description": "Edit an existing goods receipt.",
+              "route": "/procurements/receipt/edit/:id"
+            },
+            "view": {
+              "title": "View Receipt",
+              "description": "View details of a goods receipt.",
+              "route": "/procurements/receipt/view/:id"
+            }
+          }
+        },
+        "return-supplier": {
+          "title": "Return to Supplier",
+          "description": "Manage returns to suppliers.",
+          "route": "/procurements/return"
+        }
+      }
+    },
+    "master-data": {
+      "title": "Master Data",
+      "description": "Manage master data records.",
+      "route": "/master-data",
+      "subRoutes": {
+        "suppliers": {
+          "title": "Suppliers",
+          "description": "Manage supplier information.",
+          "route": "/master-data/suppliers"
+        },
+        "products": {
+          "title": "Products",
+          "description": "Manage product information.",
+          "route": "/master-data/products"
+        },
+        "categories": {
+          "title": "Categories",
+          "description": "Manage product categories.",
+          "route": "/master-data/categories"
+        }
+      }
+    },
+    "reports": {
+      "title": "Reports",
+      "description": "View and generate reports.",
+      "route": "/reports"
+    }
   }
 }

@@ -20,6 +20,10 @@ import {
 } from '@/components/ui/sidebar';
 import {ModeToggle} from '@/components/ToggleDarkmode';
 
+import {Input} from '@/components/ui/input';
+import {Button} from '@/components/ui/button';
+import SearchPanel from '@/components/SearchPanel';
+
 export default function AppLayout({children}: {children: ReactNode}) {
   const t = useTranslations('AppLayout');
 
@@ -50,6 +54,8 @@ export default function AppLayout({children}: {children: ReactNode}) {
               </Breadcrumb>
             </div>
             <div className="flex items-center gap-2 px-4">
+              <SearchPanel />
+              <LocaleSwitcher />
               <ModeToggle />
             </div>
           </div>

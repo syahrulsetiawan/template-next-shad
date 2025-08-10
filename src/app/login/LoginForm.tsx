@@ -20,7 +20,7 @@ export default function LoginForm({
   return (
     <form
       action={formAction}
-      className="mx-auto my-20 w-full max-w-[24rem] px-4"
+      className="mx-auto my-20 w-sm bg-slate-200 p-4 max-w-[24rem] rounded-lg shadow-md"
     >
       {header}
       <div className="mb-10 mt-14">

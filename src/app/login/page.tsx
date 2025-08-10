@@ -60,7 +60,7 @@ async function loginAction(
       errors: result.error.flatten()
     };
   } else {
-    redirect('/app');
+    redirect('/aether');
   }
 }
 
@@ -69,11 +69,11 @@ export default function LoginPage() {
   const locale = useLocale();
 
   return (
-    <>
-      <div className="absolute right-8 top-8">
+    <div className="border h-full flex flex-col items-center justify-center">
+      {/* <div className="absolute right-8 top-8">
         <LocaleSwitcher />
-      </div>
-      <LoginForm
+      </div> */}
+      {/* <LoginForm
         key={locale}
         action={loginAction}
         fields={
@@ -111,7 +111,7 @@ export default function LoginPage() {
             </p>
           </div>
         }
-      />
-    </>
+      /> */}
+    </div>
   );
 }

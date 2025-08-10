@@ -1,12 +1,13 @@
 import {useLocale, useTranslations} from 'next-intl';
 import LocaleSwitcherSelect from './LocaleSwitcherSelect';
+import ToggleLocale from './ToggleLocale';
 
 export default function LocaleSwitcher() {
   const t = useTranslations('LocaleSwitcher');
   const locale = useLocale();
 
   return (
-    <LocaleSwitcherSelect
+    <ToggleLocale
       defaultValue={locale}
       items={[
         {
@@ -14,8 +15,8 @@ export default function LocaleSwitcher() {
           label: t('en')
         },
         {
-          value: 'de',
-          label: t('de')
+          value: 'id',
+          label: t('id')
         }
       ]}
       label={t('label')}
