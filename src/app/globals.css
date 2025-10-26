@@ -1,11 +1,22 @@
 .bg-auth {
+  position: relative;
+  overflow: hidden;
+  background-color: #242424;
+}
+.bg-auth::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   background-image: url('/bg-auth.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: #f6f6f6;
+  filter: blur(8px);
+}
+.bg-auth > * {
   position: relative;
-  overflow: hidden;
+  z-index: 1;
 }
 .bg-auth::after {
   content: '';
@@ -24,14 +35,7 @@
     opacity: 0;
   }
 }
-/* Auth background image utility */
-.bg-auth {
-  background-image: url('/bg-auth.jpeg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: #f6f6f6;
-}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -86,6 +90,16 @@
     --text-success: 186 87% 18%;
     --text-warning: 33 100% 53%;
     --text-info: 236 48% 30%;
+
+    --sonner-background: hsl(var(--background));
+    --sonner-border: hsl(var(--border));
+    --sonner-accent: hsl(var(--accent));
+
+    /* Warna Kustom untuk Toast */
+    --sonner-success: #16a34a; /* Hijau cerah untuk sukses */
+    --sonner-error: #ef4444; /* Merah cerah untuk error */
+    --sonner-info: #3b82f6; /* Biru cerah untuk info */
+    --sonner-warning: #f59e0b; /* Kuning cerah untuk peringatan */
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -102,7 +116,7 @@
     --muted-foreground: 0 0% 63.9%;
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 354, 70%, 56%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
@@ -130,6 +144,16 @@
     --text-success: 186 87% 18%;
     --text-warning: 33 100% 53%;
     --text-info: 236 48% 30%;
+
+    --sonner-background: hsl(var(--background));
+    --sonner-border: hsl(var(--border));
+    --sonner-accent: hsl(var(--accent));
+
+    /* Warna Kustom untuk Toast */
+    --sonner-success: #16a34a; /* Hijau cerah untuk sukses */
+    --sonner-error: #ef4444; /* Merah cerah untuk error */
+    --sonner-info: #3b82f6; /* Biru cerah untuk info */
+    --sonner-warning: #f59e0b; /* Kuning cerah untuk peringatan */
   }
 }
 

@@ -15,16 +15,303 @@
   },
   "LoginPage": {
     "credentials": "Kredensial: jane@doe.com / next-intl",
-    "description": "Silakan masukkan data Anda.",
+    "description": "Masuk ke akun Anda.",
     "email": "Email",
     "invalidCredentials": "Silakan periksa kredensial Anda.",
     "invalidEmail": "Silakan masukkan alamat email yang valid.",
     "invalidPassword": "Silakan masukkan kata sandi.",
     "login": "Masuk",
     "password": "Kata Sandi",
-    "title": "Selamat datang kembali"
+    "title": "Selamat datang di Saintsation"
+  },
+  "RegisterPage": {
+    "title": "Buat Akun Baru",
+    "description": "Daftar untuk membuat akun baru.",
+    "firstName": "Nama Depan",
+    "lastName": "Nama Belakang",
+    "email": "Email",
+    "password": "Kata Sandi",
+    "confirmPassword": "Konfirmasi Kata Sandi",
+    "register": "Daftar",
+    "success": "Pendaftaran berhasil! Silakan masuk.",
+    "alreadyRegistered": "Sudah punya akun?",
+    "loginLink": "Masuk di sini.",
+    "invalidPasswordConfirmation": "Kata sandi tidak cocok."
   },
   "ProfilePage": {
     "title": "Profil"
+  },
+  "common": {
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan. Silakan coba lagi nanti.",
+    "httpError": {
+      "400": "Permintaan Buruk",
+      "401": "Tidak Sah",
+      "403": "Dilarang",
+      "404": "Tidak Ditemukan",
+      "500": "Kesalahan Server Internal"
+    },
+    "httpMessage": {
+      "400": "Permintaan tidak dapat dipahami oleh server karena sintaks yang salah.",
+      "401": "Anda tidak berwenang untuk mengakses sumber daya ini.",
+      "403": "Akses ke sumber daya ini dilarang.",
+      "404": "Sumber daya yang diminta tidak dapat ditemukan.",
+      "500": "Terjadi kesalahan tak terduga di server."
+    },
+    "errorMessage": {
+      "network": "Kesalahan jaringan. Silakan periksa koneksi internet Anda.",
+      "server": "Kesalahan server. Silakan coba lagi nanti.",
+      "validation": "Kesalahan validasi. Silakan periksa masukan Anda."
+    },
+    "validation": {
+      "required": "{field} wajib diisi.",
+      "minLength": "Panjang minimum {min} karakter.",
+      "maxLength": "Panjang maksimum {max} karakter.",
+      "email": "Silakan masukkan alamat email yang valid.",
+      "number": "Silakan masukkan angka yang valid.",
+      "size": "Ukuran harus antara {min} dan {max}.",
+      "integer": "Silakan masukkan bilangan bulat yang valid.",
+      "unique": "Nilai ini harus unik.",
+      "boolean": "Silakan masukkan nilai boolean yang valid.",
+      "stock-minimum": "Stok harus minimal {min} unit.",
+      "url": "Silakan masukkan URL yang valid.",
+      "date": "Silakan masukkan tanggal yang valid.",
+      "time": "Silakan masukkan waktu yang valid.",
+      "dateTime": "Silakan masukkan tanggal dan waktu yang valid.",
+      "pattern": "Silakan cocokkan format yang diminta.",
+      "confirmation": "Apakah Anda yakin ingin melanjutkan?",
+      "success": "Operasi berhasil diselesaikan."
+    },
+    "save": "Simpan",
+    "cancel": "Batal",
+    "delete": "Hapus",
+    "edit": "Ubah",
+    "view": "Lihat",
+    "create": "Buat",
+    "update": "Perbarui",
+    "search": "Cari",
+    "noResults": "Tidak ada hasil ditemukan.",
+    "confirmDelete": "Apakah Anda yakin ingin menghapus item ini?",
+    "yes": "Ya",
+    "no": "Tidak",
+    "back": "Kembali",
+    "next": "Berikutnya",
+    "previous": "Sebelumnya",
+    "submit": "Kirim",
+    "reset": "Atur Ulang",
+    "select": "Pilih",
+    "selectAll": "Pilih Semua",
+    "deselectAll": "Batalkan Pilihan Semua",
+    "filter": "Saring",
+    "sort": "Urutkan",
+    "sortBy": "Urutkan berdasarkan",
+    "ascending": "Naik",
+    "descending": "Menurun",
+    "actions": "Tindakan",
+    "details": "Rincian",
+    "status": "Status",
+    "createdAt": "Dibuat Pada",
+    "updatedAt": "Diperbarui Pada",
+    "createdBy": "Dibuat Oleh",
+    "updatedBy": "Diperbarui Oleh",
+    "noData": "Tidak ada data tersedia.",
+    "confirm": "Konfirmasi",
+    "close": "Tutup",
+    "download": "Unduh",
+    "upload": "Unggah",
+    "print": "Cetak",
+    "export": "Ekspor",
+    "import": "Impor",
+    "viewMore": "Lihat Lebih Banyak",
+    "viewLess": "Lihat Lebih Sedikit",
+    "help": "Bantuan",
+    "contactSupport": "Hubungi Dukungan"
+  },
+  "states": {
+    "draft": "Draf",
+    "pending": "Tertunda",
+    "approved": "Disetujui",
+    "rejected": "Ditolak",
+    "completed": "Selesai",
+    "cancelled": "Dibatalkan",
+    "active": "Aktif",
+    "inactive": "Tidak Aktif",
+    "archived": "Diarsipkan",
+    "deleted": "Dihapus",
+    "inProgress": "Sedang Berlangsung",
+    "onHold": "Ditahan",
+    "failed": "Gagal",
+    "success": "Berhasil",
+    "error": "Kesalahan",
+    "warning": "Peringatan",
+    "info": "Informasi",
+    "loading": "Memuat",
+    "partial-receipt": "Penerimaan Sebagian",
+    "full-receipt": "Penerimaan Penuh",
+    "return-requested": "Permintaan Pengembalian",
+    "return-approved": "Pengembalian Disetujui",
+    "return-rejected": "Pengembalian Ditolak",
+    "return-completed": "Pengembalian Selesai",
+    "return-in-progress": "Pengembalian Sedang Berlangsung",
+    "return-cancelled": "Pengembalian Dibatalkan",
+    "realized": "Terealisasi",
+    "not-realized": "Tidak Terealisasi",
+    "pending-approval": "Menunggu Persetujuan",
+    "approved-by-supplier": "Disetujui oleh Pemasok",
+    "rejected-by-supplier": "Ditolak oleh Pemasok",
+    "awaiting-payment": "Menunggu Pembayaran",
+    "paid": "Dibayar",
+    "unpaid": "Belum Dibayar",
+    "partially-paid": "Dibayar Sebagian",
+    "overpaid": "Kelebihan Bayar",
+    "underpaid": "Kekurangan Bayar",
+    "overdue": "Jatuh Tempo",
+    "under-review": "Dalam Tinjauan",
+    "under-investigation": "Dalam Investigasi",
+    "resolved": "Terselesaikan",
+    "escalated": "Ditingkatkan",
+    "not-applicable": "Tidak Berlaku",
+    "not-started": "Belum Dimulai",
+    "in-review": "Dalam Tinjauan",
+    "approved-by-manager": "Disetujui oleh Manajer",
+    "rejected-by-manager": "Ditolak oleh Manajer",
+    "awaiting-feedback": "Menunggu Umpan Balik",
+    "feedback-received": "Umpan Balik Diterima",
+    "feedback-pending": "Umpan Balik Tertunda",
+    "feedback-rejected": "Umpan Balik Ditolak",
+    "feedback-approved": "Umpan Balik Disetujui",
+    "feedback-in-progress": "Umpan Balik Sedang Berlangsung",
+    "feedback-completed": "Umpan Balik Selesai"
+  },
+  "notFound": {
+    "title": "Halaman Tidak Ditemukan",
+    "description": "Halaman yang Anda cari tidak ada."
+  },
+  "routes": {
+    "dashboard": {
+      "title": "Dasbor",
+      "description": "Ikhtisar kegiatan dan statistik Anda.",
+      "route": "/dashboard"
+    },
+    "profile": {
+      "title": "Profil",
+      "description": "Lihat dan ubah informasi profil Anda.",
+      "route": "/profile"
+    },
+    "settings": {
+      "title": "Pengaturan",
+      "description": "Kelola pengaturan akun Anda.",
+      "route": "/settings"
+    },
+    "help": {
+      "title": "Bantuan",
+      "description": "Dapatkan bantuan dan temukan jawaban atas pertanyaan Anda.",
+      "route": "/help"
+    },
+    "procurements": {
+      "title": "Pengadaan",
+      "description": "Kelola proses pengadaan Anda.",
+      "route": "/procurements",
+      "subRoutes": {
+        "procurement-request": {
+          "title": "Permintaan Pengadaan",
+          "description": "Buat dan kelola permintaan pengadaan.",
+          "route": "/procurements/request",
+          "subRoutes": {
+            "create": {
+              "title": "Buat Permintaan",
+              "description": "Buat permintaan pengadaan baru.",
+              "route": "/procurements/request/create"
+            },
+            "edit": {
+              "title": "Ubah Permintaan",
+              "description": "Ubah permintaan pengadaan yang sudah ada.",
+              "route": "/procurements/request/edit/:id"
+            },
+            "view": {
+              "title": "Lihat Permintaan",
+              "description": "Lihat rincian permintaan pengadaan.",
+              "route": "/procurements/request/view/:id"
+            }
+          }
+        },
+        "purchase-order": {
+          "title": "Pesanan Pembelian",
+          "description": "Lihat dan kelola pesanan pembelian.",
+          "route": "/procurements/order",
+          "subRoutes": {
+            "create": {
+              "title": "Buat Pesanan",
+              "description": "Buat pesanan pembelian baru.",
+              "route": "/procurements/order/create"
+            },
+            "edit": {
+              "title": "Ubah Pesanan",
+              "description": "Ubah pesanan pembelian yang sudah ada.",
+              "route": "/procurements/order/edit/:id"
+            },
+            "view": {
+              "title": "Lihat Pesanan",
+              "description": "Lihat rincian pesanan pembelian.",
+              "route": "/procurements/order/view/:id"
+            }
+          }
+        },
+        "goods-receipt": {
+          "title": "Penerimaan Barang",
+          "description": "Catat penerimaan barang.",
+          "route": "/procurements/receipt",
+          "subRoutes": {
+            "create": {
+              "title": "Buat Penerimaan",
+              "description": "Buat penerimaan barang baru.",
+              "route": "/procurements/receipt/create"
+            },
+            "edit": {
+              "title": "Ubah Penerimaan",
+              "description": "Ubah penerimaan barang yang sudah ada.",
+              "route": "/procurements/receipt/edit/:id"
+            },
+            "view": {
+              "title": "Lihat Penerimaan",
+              "description": "Lihat rincian penerimaan barang.",
+              "route": "/procurements/receipt/view/:id"
+            }
+          }
+        },
+        "return-supplier": {
+          "title": "Pengembalian ke Pemasok",
+          "description": "Kelola pengembalian ke pemasok.",
+          "route": "/procurements/return"
+        }
+      }
+    },
+    "master-data": {
+      "title": "Data Induk",
+      "description": "Kelola catatan data induk.",
+      "route": "/master-data",
+      "subRoutes": {
+        "suppliers": {
+          "title": "Pemasok",
+          "description": "Kelola informasi pemasok.",
+          "route": "/master-data/suppliers"
+        },
+        "products": {
+          "title": "Produk",
+          "description": "Kelola informasi produk.",
+          "route": "/master-data/products"
+        },
+        "categories": {
+          "title": "Kategori",
+          "description": "Kelola kategori produk.",
+          "route": "/master-data/categories"
+        }
+      }
+    },
+    "reports": {
+      "title": "Laporan",
+      "description": "Lihat dan buat laporan.",
+      "route": "/reports"
+    }
   }
 }

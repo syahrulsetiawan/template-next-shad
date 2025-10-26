@@ -1,0 +1,174 @@
+{
+  "dashboard": {
+    "route": "dashboard",
+    "title": "routes.dashboard.title",
+    "description": "routes.dashboard.description"
+  },
+  "settings": {
+    "title": "routes.settings.title",
+    "children": [
+      {
+        "company": {
+          "route": "/company-settings",
+          "title": "routes.settings.company.title",
+          "description": "routes.settings.company.description",
+          "children": [
+            {
+              "update": {
+                "route": "/update",
+                "title": "routes.settings.company.update.title",
+                "description": "routes.settings.company.update.description"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "branches": {
+          "route": "/branches-settings",
+          "title": "routes.settings.branches.title",
+          "description": "routes.settings.branches.description",
+          "children": [
+            {
+              "create": {
+                "route": "/create",
+                "title": "routes.settings.branches.create.title",
+                "description": "routes.settings.branches.create.description"
+              }
+            },
+            {
+              "detail": {
+                "route": "/detail",
+                "title": "routes.settings.branches.detail.title",
+                "description": "routes.settings.branches.detail.description"
+              }
+            },
+            {
+              "update": {
+                "route": "/update",
+                "title": "routes.settings.branches.update.title",
+                "description": "routes.settings.branches.update.description"
+              }
+            },
+            {
+              "toggle-active": {
+                "route": "/toggle-active",
+                "title": "routes.settings.branches.toggle-active.title",
+                "description": "routes.settings.branches.toggle-active.description"
+              }
+            },
+            {
+              "delete": {
+                "route": "/delete",
+                "title": "routes.settings.branches.delete.title",
+                "description": "routes.settings.branches.delete.description"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "general": {
+          "title": "routes.settings.general.title",
+          "children": [
+            {
+              "chart-of-accounts": {
+                "route": "master-chart-of-accounts",
+                "title": "routes.settings.general.chart-of-accounts.title",
+                "description": "routes.settings.general.chart-of-accounts.description"
+              }
+            },
+            {
+              "chart-of-account-categories": {
+                "route": "master-chart-of-accounts",
+                "title": "routes.settings.general.chart-of-account-categories.title",
+                "description": "routes.settings.general.chart-of-account-categories.description"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "user-and-role": {
+          "title": "routes.settings.user-and-role.title",
+          "children": [
+            {
+              "roles": {
+                "route": "/roles",
+                "title": "routes.settings.user-and-role.roles.title",
+                "description": "routes.settings.user-and-role.roles.description",
+                "children": [
+                  {
+                    "create": {
+                      "route": "/create",
+                      "title": "routes.settings.user-and-role.roles.create.title",
+                      "description": "routes.settings.user-and-role.roles.create.description"
+                    }
+                  },
+                  {
+                    "detail": {
+                      "route": "/detail",
+                      "title": "routes.settings.user-and-role.roles.detail.title",
+                      "description": "routes.settings.user-and-role.roles.detail.description"
+                    }
+                  },
+                  {
+                    "update": {
+                      "route": "/update",
+                      "title": "routes.settings.user-and-role.roles.update.title",
+                      "description": "routes.settings.user-and-role.roles.update.description"
+                    }
+                  },
+                  {
+                    "delete": {
+                      "route": "/delete",
+                      "title": "routes.settings.user-and-role.roles.delete.title",
+                      "description": "routes.settings.user-and-role.roles.delete.description"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "users": {
+                "route": "/users",
+                "title": "routes.settings.user-and-role.users.title",
+                "description": "routes.settings.user-and-role.users.description",
+                "children": [
+                  {
+                    "create": {
+                      "route": "/create",
+                      "title": "routes.settings.user-and-role.users.create.title",
+                      "description": "routes.settings.user-and-role.users.create.description"
+                    }
+                  },
+                  {
+                    "detail": {
+                      "route": "/detail",
+                      "title": "routes.settings.user-and-role.users.detail.title",
+                      "description": "routes.settings.user-and-role.users.detail.description"
+                    }
+                  },
+                  {
+                    "update": {
+                      "route": "/update",
+                      "title": "routes.settings.user-and-role.users.update.title",
+                      "description": "routes.settings.user-and-role.users.update.description"
+                    }
+                  },
+                  {
+                    "delete": {
+                      "route": "/delete",
+                      "title": "routes.settings.user-and-role.users.delete.title",
+                      "description": "routes.settings.user-and-role.users.delete.description"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

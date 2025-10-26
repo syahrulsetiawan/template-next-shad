@@ -131,7 +131,7 @@ const data = {
           url: '#'
         },
         {
-          title: 'Team',
+          title: 'Company',
           url: '#'
         },
         {

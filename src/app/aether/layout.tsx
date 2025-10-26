@@ -23,6 +23,7 @@ import {ModeToggle} from '@/components/ToggleDarkmode';
 import {Input} from '@/components/ui/input';
 import {Button} from '@/components/ui/button';
 import SearchPanel from '@/components/SearchPanel';
+import {Toaster} from '@/components/ui/sonner';
 
 export default function AppLayout({children}: {children: ReactNode}) {
   const t = useTranslations('AppLayout');
@@ -63,6 +64,7 @@ export default function AppLayout({children}: {children: ReactNode}) {
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <main>{children}</main>
         </div>
+        <Toaster richColors />
       </SidebarInset>
     </SidebarProvider>
   );

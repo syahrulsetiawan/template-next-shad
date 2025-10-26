@@ -15,14 +15,32 @@
   },
   "LoginPage": {
     "credentials": "Credentials: jane@doe.com / next-intl",
-    "description": "Please enter your details.",
+    "description": "Sign in to your account.",
     "email": "Email",
     "invalidCredentials": "Please check your credentials.",
     "invalidEmail": "Please enter a valid email address.",
     "invalidPassword": "Please enter a password.",
     "login": "Sign in",
     "password": "Password",
-    "title": "Welcome back"
+    "title": "Welcome to Saintsation",
+    "locked": {
+      "title": "This account has been locked",
+      "description": "Please contact administrator to unlock this account"
+    }
+  },
+  "RegisterPage": {
+    "title": "Create a New Account",
+    "description": "Register to create a new account.",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "register": "Register",
+    "success": "Registration successful! Please sign in.",
+    "alreadyRegistered": "Already have an account?",
+    "loginLink": "Sign in here.",
+    "invalidPasswordConfirmation": "Passwords do not match."
   },
   "ProfilePage": {
     "title": "Profile"
@@ -47,10 +65,16 @@
     "errorMessage": {
       "network": "Network error. Please check your internet connection.",
       "server": "Server error. Please try again later.",
-      "validation": "Validation error. Please check your input."
+      "validation": "Validation error. Please check your input.",
+      "account": {
+        "locked": {
+          "title": "this account has been locked",
+          "description": "please contact to administrator to unlock this account"
+        }
+      }
     },
     "validation": {
-      "required": "This field is required.",
+      "required": "{field} is required.",
       "minLength": "Minimum length is {min} characters.",
       "maxLength": "Maximum length is {max} characters.",
       "email": "Please enter a valid email address.",
