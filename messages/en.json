@@ -22,11 +22,7 @@
     "invalidPassword": "Please enter a password.",
     "login": "Sign in",
     "password": "Password",
-    "title": "Welcome to Saintsation",
-    "locked": {
-      "title": "This account has been locked",
-      "description": "Please contact administrator to unlock this account"
-    }
+    "title": "Welcome to Saintsation"
   },
   "RegisterPage": {
     "title": "Create a New Account",
@@ -322,6 +318,29 @@
       "title": "Reports",
       "description": "View and generate reports.",
       "route": "/reports"
+    }
+  },
+
+  "errorResponse": {
+    "login_account_locked": {
+      "title": "Account Locked",
+      "description": "Your account has been locked due to multiple failed login attempts."
+    },
+    "login_user_not_found": {
+      "title": "User Not Found",
+      "description": "There is no account registered with this email."
+    },
+    "login_deleted_account": {
+      "title": "Account Deleted",
+      "description": "This account has been deleted. Please contact support for assistance."
+    },
+    "login_inactive_user_tenants": {
+      "title": "Not Connected to Active Tenant",
+      "description": "Your account is not connected to any active tenant. Please contact your system administrator."
+    },
+    "login_invalid_credentials": {
+      "title": "Invalid Credentials",
+      "description": "The email or password you entered is incorrect. Please try again."
     }
   }
 }

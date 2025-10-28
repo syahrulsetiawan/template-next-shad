@@ -1,8 +1,9 @@
 // src/types.ts
 
 export interface ILoginCredentials {
-  email: string;
+  credentials: string;
   password: string;
+  rememberMe?: boolean;
 }
 
 export interface IAuthResponse {

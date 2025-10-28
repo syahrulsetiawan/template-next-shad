@@ -313,5 +313,27 @@
       "description": "Lihat dan buat laporan.",
       "route": "/reports"
     }
+  },
+  "errorResponse": {
+    "login_account_locked": {
+      "title": "Akun Terkunci",
+      "description": "Akun Anda telah terkunci karena beberapa upaya login yang gagal."
+    },
+    "login_user_not_found": {
+      "title": "Pengguna Tidak Ditemukan",
+      "description": "Tidak ada akun yang terdaftar dengan email ini."
+    },
+    "login_deleted_account": {
+      "title": "Akun Dihapus",
+      "description": "Akun ini telah dihapus. Silakan hubungi dukungan untuk bantuan."
+    },
+    "login_inactive_user_tenants": {
+      "title": "Tidak terhubung dengan Tenant Aktif",
+      "description": "Akun Anda tidak terhubung dengan tenant aktif mana pun. Silakan hubungi administrator sistem Anda."
+    },
+    "login_invalid_credentials": {
+      "title": "Kredensial Tidak Valid",
+      "description": "Email atau kata sandi yang Anda masukkan salah. Silakan coba lagi."
+    }
   }
 }

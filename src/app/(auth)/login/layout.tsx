@@ -7,7 +7,7 @@ import {Toaster} from '@/components/ui/sonner';
 
 export default function AppLayout({children}: {children: ReactNode}) {
   return (
-    <div className="bg-auth absolute top-0 w-screen h-screen">
+    <div className="absolute top-0 w-screen h-screen overflow-hidden">
       {children}
       <Toaster richColors />
     </div>

@@ -1,102 +1,137 @@
-// src/lib/api/axiosInstance.ts
 import axios, {
   AxiosInstance,
   AxiosRequestConfig,
   AxiosError,
-  AxiosResponse,
   AxiosHeaders
 } from 'axios';
-import authService from '../../services/authService'; // Ganti dengan path yang benar
+import authService from '@/services/authService'; // sesuaikan path kamu
 
-// Perbarui interface untuk menambahkan properti kustom _retry
-export interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
+// Konfigurasi global
+axios.defaults.withCredentials = true;
+
+// Tambahkan tipe tambahan
+interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
   withAuth?: boolean;
-  _retry?: boolean; // Properti kustom untuk logika retry
+  _retry?: boolean;
 }
 
-// Global flag untuk mencegah refresh token secara bersamaan
+// Global flag & queue untuk refresh token
 let isRefreshing = false;
 let failedQueue: Array<{
-  resolve: (value: any) => void;
-  reject: (reason?: any) => void;
+  resolve: (token: string) => void;
+  reject: (error?: any) => void;
 }> = [];
 
 const processQueue = (error: any | null, token: string | null = null) => {
   failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else if (token) {
-      prom.resolve(token);
-    }
+    if (error) prom.reject(error);
+    else if (token) prom.resolve(token);
   });
   failedQueue = [];
 };
 
+// Buat instance axios utama
 const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  timeout: 10000,
+  timeout: 15000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json'
   }
 });
 
-// Interceptor Permintaan: Menambahkan token akses
+// Fungsi ambil cookie browser
+const getCookie = (name: string): string | null => {
+  if (typeof document === 'undefined') return null;
+  const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
+  return match ? decodeURIComponent(match[2]) : null;
+};
+
+// =========================
+// REQUEST INTERCEPTOR
+// =========================
 api.interceptors.request.use(
-  (config: ExtendedAxiosRequestConfig) => {
+  async (config: ExtendedAxiosRequestConfig) => {
+    // 1️⃣ Pastikan CSRF cookie ada
+    if (!getCookie('XSRF-TOKEN')) {
+      try {
+        await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL_XSRF}/sanctum/csrf-cookie`,
+          {
+            withCredentials: true
+          }
+        );
+      } catch (err) {
+        console.error('Gagal set CSRF cookie:', err);
+      }
+    }
+
+    // 2️⃣ Set header CSRF token
+    const xsrfToken = getCookie('XSRF-TOKEN');
+    if (xsrfToken) {
+      config.headers = config.headers || {};
+      (config.headers as AxiosHeaders)['X-XSRF-TOKEN'] = xsrfToken;
+    }
+
+    // 3️⃣ Tambahkan Bearer Token kalau withAuth = true
     if (config.withAuth) {
       const token = localStorage.getItem('accessToken');
       if (token) {
+        config.headers = config.headers || {};
         (config.headers as AxiosHeaders).Authorization = `Bearer ${token}`;
       }
     }
-    return config as any;
+
+    return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Interceptor Respons: Menangani error 401 (Unauthorized)
+// =========================
+// RESPONSE INTERCEPTOR
+// =========================
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as ExtendedAxiosRequestConfig;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Kalau Unauthorized & belum di-retry → refresh token
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      originalRequest.withAuth
+    ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({resolve, reject});
         })
-          .then((token) => {
-            originalRequest.headers = (originalRequest.headers ||
-              {}) as AxiosHeaders;
-            originalRequest.headers.Authorization = 'Bearer ' + token;
+          .then((newToken) => {
+            originalRequest.headers = originalRequest.headers || {};
+            (originalRequest.headers as AxiosHeaders).Authorization =
+              `Bearer ${newToken}`;
             return api(originalRequest);
           })
-          .catch((err) => {
-            return Promise.reject(err);
-          });
+          .catch((err) => Promise.reject(err));
       }
 
       originalRequest._retry = true;
       isRefreshing = true;
 
       try {
-        const newAccessToken = await authService.refreshToken();
+        const newToken = await authService.refreshToken();
+        localStorage.setItem('accessToken', newToken);
 
-        localStorage.setItem('accessToken', newAccessToken);
+        processQueue(null, newToken);
 
+        originalRequest.headers = originalRequest.headers || {};
         (originalRequest.headers as AxiosHeaders).Authorization =
-          `Bearer ${newAccessToken}`;
-        processQueue(null, newAccessToken);
+          `Bearer ${newToken}`;
         return api(originalRequest);
-      } catch (refreshError) {
-        processQueue(refreshError);
+      } catch (err) {
+        processQueue(err);
         authService.logout();
-        return Promise.reject(refreshError);
+        return Promise.reject(err);
       } finally {
         isRefreshing = false;
       }

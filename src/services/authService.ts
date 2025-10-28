@@ -8,11 +8,14 @@ import {
 } from '../types/types';
 import {AxiosResponse, AxiosError} from 'axios';
 import {handleAxiosError} from './handleAxiosError';
+import {useLocale, useTranslations} from 'next-intl';
+import {toast} from 'sonner';
 
 // Kita pisahkan fungsi logout agar bisa diimpor secara langsung oleh interceptor
 export const logout = (): void => {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
+  sessionStorage.clear();
   console.log('Logged out successfully.');
 
   if (typeof window !== 'undefined') {
@@ -59,6 +62,22 @@ const login = async (
     }
     return response.data;
   } catch (error) {
+    // console.log('Error in authService login:', error);
+    // const t = useTranslations(error.response?.data?.reason);
+    // console.log(t('title'), {
+    //   description: t('description')
+    // });
+    console.log(error instanceof AxiosError);
+    console.log(error);
+    console.log(error.response?.data.reason);
+    if (error instanceof AxiosError) {
+      console.log('masuk sini');
+      console.log(t(`login_user_not_found.title`));
+      const t = useTranslations('errorResponse');
+      toast.error(t(`${error.response?.data.reason}.title`), {
+        description: t(`${error.response?.data.reason}.description`)
+      });
+    }
     handleAxiosError(error, 'Login');
     throw error;
   }
@@ -81,7 +100,9 @@ const register = async (
 
 const authService = {
   login,
-  register
+  register,
+  logout,
+  refreshToken
 };
 
 export default authService;

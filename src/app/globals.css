@@ -8,7 +8,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('/bg-auth.jpeg');
+  background-image: url('/login-bg.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
