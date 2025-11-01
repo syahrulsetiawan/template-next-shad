@@ -17,6 +17,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem
 } from '@/components/ui/sidebar';
+import {useTranslations} from 'next-intl';
+import {usePathname, useSelectedLayoutSegment} from 'next/navigation';
 
 export function NavMain({
   items
@@ -32,6 +34,11 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const t = useTranslations('menu');
+
+  // ambil segmen url saat ini
+  const segment = usePathname();
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -49,9 +56,12 @@ export function NavMain({
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={item.title}>
+                    <SidebarMenuButton
+                      tooltip={item.title}
+                      isActive={segment === item.url}
+                    >
                       {item.icon && <item.icon />}
-                      <span>{item.title}</span>
+                      <span className="font-semibold">{t(item.title)}</span>
                       <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -61,7 +71,7 @@ export function NavMain({
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
                             <a href={subItem.url}>
-                              <span>{subItem.title}</span>
+                              <span>{t(subItem.title)}</span>
                             </a>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
@@ -74,10 +84,14 @@ export function NavMain({
           } else {
             return (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild tooltip={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  tooltip={item.title}
+                  isActive={segment === item.url}
+                >
                   <a href={item.url} className="flex items-center gap-2 w-full">
                     {item.icon && <item.icon />}
-                    <span>{item.title}</span>
+                    <span className="font-semibold">{t(item.title)}</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>

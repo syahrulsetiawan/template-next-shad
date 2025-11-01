@@ -82,6 +82,8 @@
     --sidebar-accent-foreground: 0 0% 20.5%;
     --sidebar-border: 0 0% 89%;
     --sidebar-ring: 0 0% 70.8%;
+    --sidebar-active: 264 24% 88%;
+    --sidebar-active-foreground: 264 24% 48.8%;
 
     --bg-success: 186 87% 18%;
     --bg-warning: 33 100% 53%;
@@ -136,6 +138,8 @@
     --sidebar-accent-foreground: 0 0% 98.5%;
     --sidebar-border: 0 0% 98% / 10%;
     --sidebar-ring: 0 0% 43.9%;
+    --sidebar-active: 264 24% 48.8%;
+    --sidebar-active-foreground: 264 24% 88%;
 
     --bg-success: 186 87% 18%;
     --bg-warning: 33 100% 53%;

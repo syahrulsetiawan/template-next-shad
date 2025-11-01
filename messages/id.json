@@ -1,8 +1,35 @@
 {
+  "menu": {
+    "dashboard": "Dashboard",
+    "company_settings": "Pengaturan Perusahaan",
+    "company_operational_zone_settings": "Zona Operasional",
+    "company_branches_settings": "Cabang Perusahaan",
+    "users_settings": "Pengguna",
+    "roles_settings": "Perizinan",
+    "master_data_settings": "Data Master",
+    "products": "Produk",
+    "categories": "Kategori",
+    "tags": "Tag",
+    "vendor": "Vendor",
+    "modules": "Modul",
+    "workflow_management": "Manajemen Alur Kerja",
+    "states_management": "Manajemen Status",
+    "autonumber_management": "Penomoran Otomatis",
+    "audit_logs": "Log Audit",
+    "download_database_backup": "Cadangan Database"
+  },
+  "breadcrumb": {
+    "home": "Beranda",
+    "admin-portal": "Portal Admin"
+  },
   "AppLayout": {
     "home": "Beranda",
     "logout": "Keluar",
-    "profile": "Profil"
+    "profile": "Profil",
+    "users_settings": "Pengaturan Pengguna",
+    "user_setting_description": "Kelola preferensi dan pengaturan akun Anda.",
+    "dark_mode": "Mode Gelap",
+    "language": "Bahasa"
   },
   "HomePage": {
     "title": "Beranda"

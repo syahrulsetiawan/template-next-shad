@@ -1,8 +1,36 @@
 {
+  "menu": {
+    "dashboard": "Dashboard",
+    "company_settings": "Company Settings",
+    "company_operational_zone_settings": "Operational Zone",
+    "company_branches_settings": "Company Branches",
+    "users_settings": "Users Settings",
+    "roles_settings": "Roles & Permissions",
+    "master_data_settings": "Master Data",
+    "products": "Products",
+    "categories": "Categories",
+    "tags": "Tags",
+    "vendor": "Vendor",
+
+    "modules": "Modules",
+    "workflow_management": "Workflow Management",
+    "states_management": "States Management",
+    "autonumber_management": "Auto Number Management",
+    "audit_logs": "Audit Logs",
+    "download_database_backup": "Database Backup"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "admin-portal": "Admin Portal"
+  },
   "AppLayout": {
     "home": "Home",
     "logout": "Logout",
-    "profile": "Profile"
+    "profile": "Profile",
+    "users_settings": "User Settings",
+    "user_setting_description": "Manage your account preferences and settings.",
+    "dark_mode": "Dark Mode",
+    "language": "Language"
   },
   "HomePage": {
     "title": "Home"

@@ -1,32 +1,53 @@
 {
   "menu": [
     {
-      "name": "Dashboard",
-      "label": "dashboard",
-      "icon": "dashboard",
-      "link": "/dashboard",
-      "permission": 1
+      "title": "dashboard",
+      "url": "admin-portal",
+      "icon": "PieChart"
     },
     {
-      "name": "User Management",
-      "label": "user_management",
-      "icon": "users",
-      "link": "/users",
-      "permission": 1
+      "title": "company_settings",
+      "url": "admin-portal/company-settings",
+      "icon": "Building"
     },
     {
-      "name": "Role & Permission",
-      "label": "role_permission",
-      "icon": "shield",
-      "link": "/roles",
-      "permission": 1
+      "title": "company_operational_zone_settings",
+      "url": "admin-portal/operational_zone-settings",
+      "icon": "MapPin"
     },
     {
-      "name": "Settings",
-      "label": "settings",
-      "icon": "settings",
-      "link": "/settings",
-      "permission": 1
+      "title": "company_branches_settings",
+      "url": "admin-portal/branches-settings",
+      "icon": "Branch"
+    },
+    {
+      "title": "users_settings",
+      "url": "admin-portal/users-settings",
+      "icon": "Users"
+    },
+    {
+      "title": "roles_settings",
+      "url": "admin-portal/roles-settings",
+      "icon": "ShieldCheck"
+    },
+    {
+      "title": "master_data_settings",
+      "url": "#",
+      "icon": "Key",
+      "items": [
+        {
+          "title": "products",
+          "url": "admin-portal/products-settings"
+        },
+        {
+          "title": "categories",
+          "url": "admin-portal/categories-settings"
+        },
+        {
+          "title": "tags",
+          "url": "admin-portal/tags-settings"
+        }
+      ]
     }
   ]
 }
