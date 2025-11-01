@@ -1,0 +1,32 @@
+{
+  "menu": [
+    {
+      "name": "Dashboard",
+      "label": "dashboard",
+      "icon": "dashboard",
+      "link": "/dashboard",
+      "permission": 1
+    },
+    {
+      "name": "User Management",
+      "label": "user_management",
+      "icon": "users",
+      "link": "/users",
+      "permission": 1
+    },
+    {
+      "name": "Role & Permission",
+      "label": "role_permission",
+      "icon": "shield",
+      "link": "/roles",
+      "permission": 1
+    },
+    {
+      "name": "Settings",
+      "label": "settings",
+      "icon": "settings",
+      "link": "/settings",
+      "permission": 1
+    }
+  ]
+}

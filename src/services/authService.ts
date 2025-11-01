@@ -67,9 +67,6 @@ const login = async (
     // console.log(t('title'), {
     //   description: t('description')
     // });
-    console.log(error instanceof AxiosError);
-    console.log(error);
-    console.log(error.response?.data.reason);
     if (error instanceof AxiosError) {
       console.log('masuk sini');
       console.log(t(`login_user_not_found.title`));
