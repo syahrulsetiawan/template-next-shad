@@ -356,7 +356,7 @@
     },
     "login_user_not_found": {
       "title": "User Not Found",
-      "description": "There is no account registered with this email."
+      "description": "There is no account registered with this credentials."
     },
     "login_deleted_account": {
       "title": "Account Deleted",
@@ -368,7 +368,11 @@
     },
     "login_invalid_credentials": {
       "title": "Invalid Credentials",
-      "description": "The email or password you entered is incorrect. Please try again."
+      "description": "The password you entered is incorrect. Please try again."
+    },
+    "something_went_wrong": {
+      "title": "Something Went Wrong",
+      "description": "An unexpected error occurred. Please try again later."
     }
   }
 }

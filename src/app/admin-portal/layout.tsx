@@ -16,6 +16,7 @@ import LocaleSwitcher from '@/components/LocaleSwitcher';
 import {NavigationMenuDemo} from '@/components/navbar';
 import {TeamSwitcher} from '@/components/team-switcher';
 import {AudioWaveform, Command, GalleryVerticalEnd} from 'lucide-react';
+import {MyNotification} from '@/components/Notification';
 
 const teams = [
   {
@@ -54,6 +55,7 @@ export default function AppLayout({children}: {children: ReactNode}) {
               </div>
               <div className="flex items-center gap-2 px-4">
                 <SearchPanel />
+                <MyNotification />
                 <LocaleSwitcher />
                 <UserSetting />
               </div>

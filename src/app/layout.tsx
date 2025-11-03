@@ -5,6 +5,7 @@ import {getLocale} from 'next-intl/server';
 import {ReactNode} from 'react';
 import './globals.css';
 import {ThemeProvider} from '@/components/ThemeProvider';
+import {Toaster} from 'sonner';
 
 const inter = Inter({subsets: ['latin']});
 
@@ -21,6 +22,7 @@ export default async function LocaleLayout({children}: Props) {
         <title>next-intl example</title>
       </head>
       <body className={clsx('min-h-[100vh]', inter.className)}>
+        <Toaster richColors />
         <NextIntlClientProvider>
           <ThemeProvider
             attribute="class"

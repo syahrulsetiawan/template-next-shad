@@ -1,11 +1,16 @@
 'use client';
+import {UsersIcon} from '@heroicons/react/24/outline';
+import {isEqual, set} from 'lodash';
 import {redirect} from 'next/navigation';
 import {useLocale, useTranslations} from 'next-intl';
+import {getTranslations} from 'next-intl/server';
 import {z} from 'zod';
 import {toast} from 'sonner';
 import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
+import {loginUser} from '@/services/session';
+import {Card, CardContent, CardFooter} from '@/components/ui/card';
 import {Separator} from '@/components/ui/separator';
 import {useState} from 'react';
 import {useForm} from 'react-hook-form';
@@ -20,22 +25,17 @@ import {
 } from '@/components/ui/form';
 import {Check, Loader2Icon} from 'lucide-react';
 import authService from '@/services/authService';
+import {AxiosError} from 'axios';
 import Image from 'next/image';
 import {Checkbox} from '@/components/ui/checkbox';
 import {Label} from '@/components/ui/label';
 import Link from 'next/link';
-
-// --- Import hook yang baru dibuat ---
-import {useUserLogin} from '@/hooks/useUserLogin'; // Asumsikan path hook Anda
 
 export default function LoginPage() {
   const t = useTranslations('LoginPage');
   const e = useTranslations('errorResponse');
   const v = useTranslations('common.validation');
   const locale = useLocale();
-
-  // --- Gunakan hook yang baru ---
-  const {setAllData, dataUser} = useUserLogin(); // Ambil fungsi untuk menyimpan data user
 
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -63,50 +63,39 @@ export default function LoginPage() {
 
   const onSubmit = async (data: ILoginFormSchema) => {
     console.log('Form Data:', data);
-    if (isLoading) return; // Guard clause untuk mencegah multiple submit
+    if (!isLoading) {
+      setIsLoading(true);
 
-    setIsLoading(true);
+      try {
+        // Panggil fungsi login dari authService
+        const response = await authService.login(data);
+        console.log('Login berhasil:', response);
+        toast.success('Login Success', {
+          description: 'Welcome Back, Syahrul',
+          position: 'top-center'
+        });
 
-    try {
-      // 1. Panggil fungsi login
-      const response = await authService.login(data);
+        localStorage.setItem('accessToken', response.access_token);
 
-      // 2. Ambil Profil Pengguna
-      const getProfile = await authService.myProfile();
+        const getProfile = await authService.myProfile();
+        console.log('My Profile:', getProfile);
 
-      // --- INTEGRASI HOOK BARU ---
-      // 3. Simpan data profil ke state global/context melalui hook
-      setAllData(getProfile);
-
-      toast.success('Login Success', {
-        description: `Welcome Back, ${getProfile.name}`, // Personalisasi pesan selamat datang
-        position: 'top-center'
-      });
-
-      // 4. Redirect ke halaman dashboard
-      // Gunakan redirect dari next/navigation untuk klien-side redirect yang lebih baik
-      // Ini akan throw error yang ditangani oleh Next.js untuk navigasi
-      const last_service = dataUser?.last_service_key || 'admin-portal';
-
-      redirect(`/${last_service}`);
-    } catch (err: any) {
-      console.error('Login failed:', err);
-
-      // Penanganan error tetap sama (sudah baik)
-      const errorReason = err.reason || 'something_went_wrong';
-      toast.error(e(errorReason + '.title'), {
-        description: e(errorReason + '.description'),
-        position: 'top-center'
-      });
-      // Jika terjadi error, hapus token yang mungkin tersimpan
-      localStorage.removeItem('accessToken');
-    } finally {
-      setIsLoading(false);
+        // Redirect ke halaman dashboard atau halaman utama setelah login sukses
+        // Contoh:
+        // window.location.href = '/aether';
+      } catch (err: any) {
+        console.error('Login failed:', err);
+        toast.error(e(err.reason + '.title'), {
+          description: e(err.reason + '.description'),
+          position: 'top-center'
+        });
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
-
+  
   return (
-    // ... Bagian Render (tetap sama) ...
     <div className="border flex flex-col items-center justify-center">
       <div className="w-screen h-screen border block lg:flex items-center justify-center">
         {/* form */}
@@ -187,20 +176,17 @@ export default function LoginPage() {
                       Forgot password?
                     </Link>
                   </div>
-                  <Button
-                    className="w-full mt-4"
-                    type="submit"
-                    disabled={isLoading}
-                  >
-                    {/* Tambahkan disabled={isLoading} */}
+                  <Button className="w-full mt-4" type="submit">
                     {isLoading ? (
-                      <Loader2Icon className="animate-spin mr-2" />
+                      <Loader2Icon className="animate-spin" />
                     ) : null}
                     {t('login')}
                   </Button>
                 </form>
               </Form>
             </div>
+            {/* <div className="form">
+            </div> */}
             <Separator className="my-4 w-[360px]" />
             <Link href="/register">
               <Button variant="secondary" className="w-[360px]">
@@ -231,6 +217,71 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      {/* <Card className="w-[350px] border-purple-400 shadow-lg shadow-purple-400/20">
+        <CardContent>
+          <div className="flex flex-col items-center mb-8">
+            <h1 className="mt-4 text-xl font-semibold tracking-tight text-foreground">
+              {t('title')}
+            </h1>
+            <p className="mt-2 text-muted-foreground">{t('description')}</p>
+          </div>
+          <div className="form">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="mb-2">
+                  <FormField
+                    control={form.control}
+                    name="credentials"
+                    render={({field}) => (
+                      <FormItem>
+                        <FormLabel>credential</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="username or email or phone number"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="mb-2">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({field}) => (
+                      <FormItem>
+                        <FormLabel>password</FormLabel>
+                        <FormControl>
+                          <Input placeholder="password" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <Button className="w-full mt-4" type="submit">
+                  {isLoading ? <Loader2Icon className="animate-spin" /> : null}
+                  {t('login')}
+                </Button>
+              </form>
+            </Form>
+          </div>
+          <Separator className="my-4" />
+          <Link href="/register">
+            <Button variant="secondary" className="w-full">
+              Register
+            </Button>
+          </Link>
+        </CardContent>
+        <CardFooter>
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            {t('credentials')}
+          </p>
+        </CardFooter>
+      </Card> */}
     </div>
   );
 }

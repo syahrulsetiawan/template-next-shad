@@ -348,7 +348,7 @@
     },
     "login_user_not_found": {
       "title": "Pengguna Tidak Ditemukan",
-      "description": "Tidak ada akun yang terdaftar dengan email ini."
+      "description": "Tidak ada akun yang terdaftar dengan kredensial ini."
     },
     "login_deleted_account": {
       "title": "Akun Dihapus",
@@ -360,7 +360,11 @@
     },
     "login_invalid_credentials": {
       "title": "Kredensial Tidak Valid",
-      "description": "Email atau kata sandi yang Anda masukkan salah. Silakan coba lagi."
+      "description": "Kata sandi yang Anda masukkan salah. Silakan coba lagi."
+    },
+    "something_went_wrong": {
+      "title": "Terjadi Kesalahan",
+      "description": "Terjadi kesalahan tak terduga. Silakan coba lagi nanti."
     }
   }
 }

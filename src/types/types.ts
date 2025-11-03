@@ -7,7 +7,7 @@ export interface ILoginCredentials {
 }
 
 export interface IAuthResponse {
-  accessToken: string;
+  access_token: string;
   refreshToken: string;
   user: {
     id: string;

@@ -6,6 +6,7 @@ import {
   IAuthResponse,
   IAuthRegisterCredentials
 } from '../types/types';
+import {UserData} from '../hooks/UserTypes';
 import {AxiosResponse, AxiosError} from 'axios';
 import {handleAxiosError} from './handleAxiosError';
 import {useLocale, useTranslations} from 'next-intl';
@@ -56,27 +57,26 @@ const login = async (
       '/login',
       credentials
     );
-    localStorage.setItem('accessToken', response.data.accessToken);
+    localStorage.setItem('accessToken', response.data.access_token);
     if (response.data.refreshToken) {
       localStorage.setItem('refreshToken', response.data.refreshToken);
     }
     return response.data;
   } catch (error) {
-    // console.log('Error in authService login:', error);
-    // const t = useTranslations(error.response?.data?.reason);
-    // console.log(t('title'), {
-    //   description: t('description')
-    // });
-    if (error instanceof AxiosError) {
-      console.log('masuk sini');
-      console.log(t(`login_user_not_found.title`));
-      const t = useTranslations('errorResponse');
-      toast.error(t(`${error.response?.data.reason}.title`), {
-        description: t(`${error.response?.data.reason}.description`)
-      });
-    }
-    handleAxiosError(error, 'Login');
-    throw error;
+    let errorInfo = handleAxiosError(error, 'Login');
+    throw errorInfo;
+  }
+};
+
+const myProfile = async (): Promise<UserData> => {
+  try {
+    const response: AxiosResponse<UserData> = await api.get('/me', {
+      withAuth: true
+    });
+    return response.data;
+  } catch (error) {
+    let errorInfo = handleAxiosError(error, 'MyProfile');
+    throw errorInfo;
   }
 };
 
@@ -98,6 +98,7 @@ const register = async (
 const authService = {
   login,
   register,
+  myProfile,
   logout,
   refreshToken
 };

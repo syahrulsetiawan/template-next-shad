@@ -54,17 +54,17 @@ const getCookie = (name: string): string | null => {
 api.interceptors.request.use(
   async (config: ExtendedAxiosRequestConfig) => {
     // 1️⃣ Pastikan CSRF cookie ada
-    if (!getCookie('XSRF-TOKEN')) {
-      try {
-        await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL_XSRF}/sanctum/csrf-cookie`,
-          {
-            withCredentials: true
-          }
-        );
-      } catch (err) {
-        console.error('Gagal set CSRF cookie:', err);
-      }
+    // if (!getCookie('XSRF-TOKEN')) {
+    // }
+    try {
+      await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL_XSRF}/sanctum/csrf-cookie`,
+        {
+          withCredentials: true
+        }
+      );
+    } catch (err) {
+      console.error('Gagal set CSRF cookie:', err);
     }
 
     // 2️⃣ Set header CSRF token
