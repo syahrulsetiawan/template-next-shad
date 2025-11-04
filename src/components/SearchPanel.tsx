@@ -79,7 +79,12 @@ export default function SearchPanel(props: ISearchPanelProps) {
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Input placeholder="Search Something" type="text" readOnly />
+          <Input
+            placeholder="Search Something"
+            className="hidden md:block"
+            type="text"
+            readOnly
+          />
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px] md:max-w-[680] min-h-425px">
           <DialogHeader>

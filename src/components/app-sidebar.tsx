@@ -30,6 +30,7 @@ import {
   SidebarMenuItem,
   SidebarRail
 } from '@/components/ui/sidebar';
+import {useUserLogin} from '@/hooks/useUserLogin';
 
 // This is sample data.
 const data = {
@@ -167,6 +168,10 @@ const data = {
 };
 
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
+  const {tenants, dataUser} = useUserLogin();
+  console.log('tenants sidebar', tenants);
+  console.log('userData sidebar', dataUser);
+
   return (
     <Sidebar collapsible="icon" {...props} variant="sidebar">
       <SidebarHeader>

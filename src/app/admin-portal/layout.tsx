@@ -49,9 +49,11 @@ export default function AppLayout({children}: {children: ReactNode}) {
                 <SidebarTrigger className="-ml-1" />
                 <Separator
                   orientation="vertical"
-                  className="mr-2 data-[orientation=vertical]:h-4"
+                  className="mr-2 data-[orientation=vertical]:h-4 hidden md:block"
                 />
-                <MyBreadcrumb />
+                <div className="hidden md:block">
+                  <MyBreadcrumb />
+                </div>
               </div>
               <div className="flex items-center gap-2 px-4">
                 <SearchPanel />
@@ -61,6 +63,9 @@ export default function AppLayout({children}: {children: ReactNode}) {
               </div>
             </div>
           </header>
+          <div className="block lg:hidden px-4 mb-2">
+            <MyBreadcrumb />
+          </div>
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
             <main>{children}</main>
           </div>

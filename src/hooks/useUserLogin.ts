@@ -28,6 +28,7 @@ export const useUserLogin = (): UseUserLoginReturn => {
    * @param data Objek UserData yang diterima dari /api/me
    */
   const setAllData = (data: UserData) => {
+    console.log('setAllData called with data:', data);
     setDataUser(data);
     setUserSettings(data.configs);
     setTenants(data.tenants);

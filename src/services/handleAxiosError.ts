@@ -6,8 +6,6 @@ export const handleAxiosError = (
   error: any,
   actionName: string
 ): {status: number | undefined; reason: string | undefined} | undefined => {
-  console.error(error); // Lebih baik menggunakan console.error untuk error
-
   if (error instanceof AxiosError) {
     const status = error.response?.status;
     const reason = error.response?.data?.reason;

@@ -83,23 +83,23 @@ export default function LoginPage() {
         position: 'top-center'
       });
 
-      // 4. Redirect ke halaman dashboard
-      // Gunakan redirect dari next/navigation untuk klien-side redirect yang lebih baik
-      // Ini akan throw error yang ditangani oleh Next.js untuk navigasi
       const last_service = dataUser?.last_service_key || 'admin-portal';
 
+      // Gunakan router.push daripada redirect agar berjalan di client-side
       redirect(`/${last_service}`);
     } catch (err: any) {
       console.error('Login failed:', err);
 
       // Penanganan error tetap sama (sudah baik)
-      const errorReason = err.reason || 'something_went_wrong';
-      toast.error(e(errorReason + '.title'), {
-        description: e(errorReason + '.description'),
-        position: 'top-center'
-      });
-      // Jika terjadi error, hapus token yang mungkin tersimpan
-      localStorage.removeItem('accessToken');
+      const errorReason = err.reason;
+      if (errorReason != null && errorReason != undefined) {
+        toast.error(e(errorReason + '.title'), {
+          description: e(errorReason + '.description'),
+          position: 'top-center'
+        });
+        // Jika terjadi error, hapus token yang mungkin tersimpan
+        localStorage.removeItem('accessToken');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -108,9 +108,9 @@ export default function LoginPage() {
   return (
     // ... Bagian Render (tetap sama) ...
     <div className="border flex flex-col items-center justify-center">
-      <div className="w-screen h-screen border block lg:flex items-center justify-center">
+      <div className="w-screen h-screen border block md:flex items-center justify-center">
         {/* form */}
-        <div className="w-1/2 h-full bg-background flex flex-col justify-between">
+        <div className="w-full lg:w-1/2 h-full bg-background flex flex-col justify-between">
           <div className="p-4 flex justify-end">
             <LocaleSwitcher />
           </div>
@@ -215,7 +215,7 @@ export default function LoginPage() {
           </div>
         </div>
         {/* Background Image */}
-        <div className="w-1/2 h-full relative flex justify-end p-4">
+        <div className="w-full lg:w-1/2 h-full relative flex justify-end p-4">
           <Image
             src="/login-bg.png"
             alt="Login Illustration"
