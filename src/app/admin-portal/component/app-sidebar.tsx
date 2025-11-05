@@ -14,7 +14,7 @@ import {
   SquareTerminal
 } from 'lucide-react';
 
-import {AdminPortalPlatform} from '@/data/Menu';
+import {AdminPortalPlatform, AdminPortalUserThings, AdminPortalUserData} from '@/data/Menu';
 
 import {NavMain} from '@/components/nav-main';
 import {NavProjects} from '@/components/nav-projects';
@@ -30,6 +30,7 @@ import {
   SidebarMenuItem,
   SidebarRail
 } from '@/components/ui/sidebar';
+import { NavbarComponent } from './NavbarComponent';
 
 // This is sample data.
 const data = {
@@ -173,8 +174,9 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={AdminPortalPlatform} />
-        {/* <NavProjects projects={data.projects} /> */}
+        <NavbarComponent groupLabel="Platform" items={AdminPortalPlatform} />
+        <NavbarComponent groupLabel="User" items={AdminPortalUserThings} />
+        <NavbarComponent groupLabel="Data" items={AdminPortalUserData} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

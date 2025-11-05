@@ -17,11 +17,13 @@
     "states_management": "States Management",
     "autonumber_management": "Auto Number Management",
     "audit_logs": "Audit Logs",
-    "download_database_backup": "Database Backup"
+    "download_database_backup": "Database Backup",
+    "session_management": "Session Management"
   },
   "breadcrumb": {
     "home": "Home",
-    "admin-portal": "Admin Portal"
+    "admin-portal": "Admin Portal",
+    "company-settings": "Company Settings"
   },
   "AppLayout": {
     "home": "Home",
@@ -69,6 +71,14 @@
   "ProfilePage": {
     "title": "Profile"
   },
+
+  "default": {
+    "CompanySettingsPage": {
+      "title": "Company Settings",
+      "description": "Manage your company information and settings."
+    }
+  },
+  
   "common": {
     "loading": "Loading...",
     "error": "An error occurred. Please try again later.",

@@ -16,11 +16,13 @@
     "states_management": "Manajemen Status",
     "autonumber_management": "Penomoran Otomatis",
     "audit_logs": "Log Audit",
-    "download_database_backup": "Cadangan Database"
+    "download_database_backup": "Cadangan Database",
+    "session_management": "Manajemen Sesi"
   },
   "breadcrumb": {
     "home": "Beranda",
-    "admin-portal": "Portal Admin"
+    "admin-portal": "Portal Admin",
+    "company-settings": "Pengaturan Perusahaan"
   },
   "AppLayout": {
     "home": "Beranda",
@@ -40,6 +42,7 @@
     "id": "Indonesia",
     "label": "Bahasa"
   },
+
   "LoginPage": {
     "credentials": "Kredensial: jane@doe.com / next-intl",
     "description": "Masuk ke akun Anda.",
@@ -68,6 +71,14 @@
   "ProfilePage": {
     "title": "Profil"
   },
+
+  "default": {
+    "CompanySettingsPage": {
+      "title": "Pengaturan Perusahaan",
+      "description": "Kelola informasi dan pengaturan perusahaan Anda."
+    }
+  },
+
   "common": {
     "loading": "Memuat...",
     "error": "Terjadi kesalahan. Silakan coba lagi nanti.",

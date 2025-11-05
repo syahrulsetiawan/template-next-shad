@@ -1,6 +1,7 @@
 import {
   Building,
   Download,
+  Glasses,
   History,
   MapPin,
   PieChart,
@@ -11,7 +12,7 @@ import {
   Workflow
 } from 'lucide-react';
 
-export const menu = [
+export const AdminPortalPlatform = [
   {
     title: 'dashboard',
     url: '/admin-portal',
@@ -35,18 +36,6 @@ export const menu = [
     url: '/admin-portal/branches-settings',
     icon: Building,
     is_owner_only: true
-  },
-  {
-    title: 'users_settings',
-    url: '/admin-portal/users-settings',
-    icon: Users,
-    is_owner_only: false
-  },
-  {
-    title: 'roles_settings',
-    url: '/admin-portal/roles-settings',
-    icon: UserRoundCog,
-    is_owner_only: false
   },
   {
     title: 'master_data_settings',
@@ -73,7 +62,32 @@ export const menu = [
         url: '/admin-portal/autonumber-management'
       }
     ]
+  }
+];
+
+export const AdminPortalUserThings = [
+  {
+    title: 'users_settings',
+    url: '/admin-portal/users-settings',
+    icon: Users,
+    is_owner_only: false
   },
+  {
+    title: 'roles_settings',
+    url: '/admin-portal/roles-settings',
+    icon: UserRoundCog,
+    is_owner_only: false
+  },
+  
+  {
+    title: 'session_management',
+    url: '/admin-portal/session-management',
+    icon: Glasses,
+    is_owner_only: false
+  },
+  
+];
+export const AdminPortalUserData = [
   {
     title: 'audit_logs',
     url: '/admin-portal/audit-logs',

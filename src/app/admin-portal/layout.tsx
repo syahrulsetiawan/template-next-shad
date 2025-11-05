@@ -1,6 +1,6 @@
 import {useTranslations} from 'next-intl';
 import {ReactNode} from 'react';
-import {AppSidebar} from '@/components/app-sidebar';
+// import {AppSidebar} from '@/components/app-sidebar';
 import {Separator} from '@/components/ui/separator';
 import {
   SidebarInset,
@@ -16,7 +16,9 @@ import LocaleSwitcher from '@/components/LocaleSwitcher';
 import {NavigationMenuDemo} from '@/components/navbar';
 import {TeamSwitcher} from '@/components/team-switcher';
 import {AudioWaveform, Command, GalleryVerticalEnd} from 'lucide-react';
-import {MyNotification} from '@/components/Notification';
+// import {MyNotification} from '@/components/Notification';
+import { AppSidebar } from './component/app-sidebar';
+import { NotificationDropdown } from '@/components/MyNotification';
 
 const teams = [
   {
@@ -55,7 +57,7 @@ export default function AppLayout({children}: {children: ReactNode}) {
               </div>
               <div className="flex items-center gap-2 px-4">
                 <SearchPanel />
-                <MyNotification />
+                <NotificationDropdown />
                 <LocaleSwitcher />
                 <UserSetting />
               </div>
