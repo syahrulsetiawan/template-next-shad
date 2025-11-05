@@ -63,7 +63,7 @@ export function NavbarComponent({
                       isActive={segment === item.url}
                     >
                       {item.icon && <item.icon />}
-                      <span className="font-semibold">{t(item.title)}</span>
+                      <span className={segment == item.url ? "font-semibold" : ""}>{t(item.title)}</span>
                       <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -93,7 +93,7 @@ export function NavbarComponent({
                 >
                   <a href={item.url} className="flex items-center gap-2 w-full">
                     {item.icon && <item.icon />}
-                    <span className="font-semibold">{t(item.title)}</span>
+                    <span className={segment == item.url ? "font-semibold" : ""}>{t(item.title)}</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>

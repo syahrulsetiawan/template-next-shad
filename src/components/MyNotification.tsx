@@ -93,7 +93,7 @@ export function NotificationDropdown() {
         <Button
           variant="ghost"
           size="icon"
-          className="relative h-9 w-9 rounded-full"
+          className="relative"
         >
           <Bell className="h-5 w-5" />
           {/* Badge Notifikasi Belum Dibaca */}

@@ -75,7 +75,56 @@
   "default": {
     "CompanySettingsPage": {
       "title": "Company Settings",
-      "description": "Manage your company information and settings."
+      "description": "Manage your company information and settings.",
+      "companyInformation": "Company Information",
+      "companyAddress": "Company Address",
+      "configuration": "Configuration",
+      "form": {
+        "companyName": {
+          "label": "Company Name",
+          "placeholder": "Enter your company name"
+        },
+        "companyTaxNumber": {
+          "label": "Company Tax Number",
+          "placeholder": "Enter your company tax number"
+        },
+        "companyEmail": {
+          "label": "Company Email",
+          "placeholder": "Enter your company email"
+        },
+        "companyPhone": {
+          "label": "Company Phone",
+          "placeholder": "Enter your company phone number"
+        },
+        "companyWebsite": {
+          "label": "Company Website",
+          "placeholder": "Enter your company website URL"
+        },
+        "companyLogo": {
+          "label": "Company Logo",
+          "placeholder": "Select your company logo file"
+        },
+        "companyAddress": {
+          "label": "Company Address",
+          "placeholder": "Enter your company address"
+        },
+        "companyCountry": {
+          "label": "Company Country",
+          "placeholder": "Enter your company country"
+        },
+        "companyCity": {
+          "label": "Company City",
+          "placeholder": "Enter your company city"
+        },
+        "companyProvince": {
+          "label": "Company Province",
+          "placeholder": "Enter your company province"
+        },
+        "companyPostalCode": {
+          "label": "Company Postal Code",
+          "placeholder": "Enter your company postal code"
+        }
+      }
     }
   },
   

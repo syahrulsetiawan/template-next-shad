@@ -75,9 +75,59 @@
   "default": {
     "CompanySettingsPage": {
       "title": "Pengaturan Perusahaan",
-      "description": "Kelola informasi dan pengaturan perusahaan Anda."
+      "description": "Kelola informasi dan pengaturan perusahaan Anda.",
+      "companyInformation": "Informasi Perusahaan",
+      "companyAddress": "Alamat Perusahaan",
+      "configuration": "Konfigurasi",
+      "form": {
+        "companyName": {
+          "label": "Nama Perusahaan",
+          "placeholder": "Masukkan nama perusahaan Anda"
+        },
+        "companyTaxNumber": {
+          "label": "Nomor Pajak/NPWP",
+          "placeholder": "Masukkan nomor pajak perusahaan Anda"
+        },
+        "companyEmail": {
+          "label": "Email Perusahaan",
+          "placeholder": "Masukkan email perusahaan Anda"
+        },
+        "companyPhone": {
+          "label": "Telepon Perusahaan",
+          "placeholder": "Masukkan nomor telepon perusahaan Anda"
+        },
+        "companyWebsite": {
+          "label": "Website Perusahaan",
+          "placeholder": "Masukkan URL website perusahaan Anda"
+        },
+        "companyLogo": {
+          "label": "Logo Perusahaan",
+          "placeholder": "Pilih file logo perusahaan Anda"
+        },
+        "companyAddress": {
+          "label": "Alamat Perusahaan",
+          "placeholder": "Masukkan alamat perusahaan Anda"
+        },
+        "companyCountry": {
+          "label": "Negara",
+          "placeholder": "Masukkan negara perusahaan Anda"
+        },
+        "companyCity": {
+          "label": "Kota",
+          "placeholder": "Masukkan kota perusahaan Anda"
+        },
+        "companyProvince": {
+          "label": "Provinsi",
+          "placeholder": "Masukkan provinsi perusahaan Anda"
+        },
+        "companyPostalCode": {
+          "label": "Kode Pos",
+          "placeholder": "Masukkan kode pos perusahaan Anda"
+        }
+      }
     }
   },
+  
 
   "common": {
     "loading": "Memuat...",

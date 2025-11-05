@@ -27,7 +27,7 @@ export const AdminPortalPlatform = [
   },
   {
     title: 'company_operational_zone_settings',
-    url: '/admin-portal/operational_zone-settings',
+    url: '/admin-portal/operational-zone-settings',
     icon: MapPin,
     is_owner_only: true
   },
