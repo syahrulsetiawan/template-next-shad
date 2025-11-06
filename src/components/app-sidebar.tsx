@@ -19,7 +19,7 @@ import {AdminPortalPlatform} from '@/data/Menu';
 import {NavMain} from '@/components/nav-main';
 import {NavProjects} from '@/components/nav-projects';
 import {NavUser} from '@/components/nav-user';
-import {TeamSwitcher} from '@/components/team-switcher';
+import {TeamSwitcher} from '@/components/layout/team-switcher';
 import {
   Sidebar,
   SidebarContent,

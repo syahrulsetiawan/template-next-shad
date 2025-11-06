@@ -1,17 +1,17 @@
-// components/ImageUploader.tsx
 'use client';
 
-import React, { useState, useCallback, ChangeEvent, DragEvent } from 'react';
-import { Input } from '@/components/ui/input'; // Pastikan path ini benar
-import { Label } from '@/components/ui/label'; // Pastikan path ini benar
-import { Upload, FileImage, X } from 'lucide-react';
-import { cn } from '@/lib/utils'; // Pastikan Anda memiliki utility function cn
+import React, { useState, useCallback, ChangeEvent, DragEvent, useEffect } from 'react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Upload, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface ImageUploaderProps {
   onFileChange: (file: File | null) => void;
   label?: string;
   className?: string;
   accept?: string;
+  initialImage?: string; // URL image existing
 }
 
 export const ImageUploader: React.FC<ImageUploaderProps> = ({
@@ -19,34 +19,44 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   label = 'Upload Gambar',
   className,
   accept = 'image/*',
+  initialImage,
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(initialImage || null);
   const [isDragOver, setIsDragOver] = useState(false);
 
-  // --- Handlers
+  useEffect(() => {
+    // kalau props initialImage berubah, update preview
+    if (initialImage) {
+      setPreviewUrl(initialImage);
+    }
+  }, [initialImage]);
+
   const handleFileChange = (file: File | null) => {
     setSelectedFile(file);
     onFileChange(file);
+
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    } else {
+      if (selectedFile) URL.revokeObjectURL(previewUrl!);
+      setPreviewUrl(initialImage || null);
+    }
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      handleFileChange(file);
-    }
+    const file = event.target.files?.[0] ?? null;
+    handleFileChange(file);
   };
 
   const handleRemoveFile = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation(); // Mencegah klik menyebar ke input
+    event.stopPropagation();
     handleFileChange(null);
-    // Secara opsional: reset input file secara manual jika diperlukan
     const inputElement = document.getElementById('image-upload-input') as HTMLInputElement;
-    if (inputElement) {
-      inputElement.value = '';
-    }
+    if (inputElement) inputElement.value = '';
   };
 
-  // --- Drag and Drop Handlers
   const handleDragOver = useCallback((event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setIsDragOver(true);
@@ -62,7 +72,6 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     setIsDragOver(false);
     const file = event.dataTransfer.files?.[0];
 
-    // Cek apakah file adalah gambar (sederhana)
     if (file && file.type.startsWith('image/')) {
       handleFileChange(file);
     } else if (file) {
@@ -70,60 +79,23 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     }
   }, []);
 
-  // --- Render
-  const renderContent = () => {
-    if (selectedFile) {
-      return (
-        <div className="flex flex-col items-center justify-center p-4">
-          <FileImage className="h-12 w-12 text-green-500" />
-          <p className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-            {selectedFile.name}
-          </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            {(selectedFile.size / 1024).toFixed(2)} KB
-          </p>
-          <button
-            type="button"
-            onClick={handleRemoveFile}
-            className="absolute top-2 right-2 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-red-500 dark:hover:bg-gray-700"
-            aria-label="Hapus file"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex flex-col items-center justify-center space-y-1 py-4">
-        <Upload className="h-6 w-6 text-gray-500 dark:text-gray-400" />
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Seret & Lepas gambar di sini
-        </p>
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          atau Klik untuk memilih file
-        </p>
-      </div>
-    );
-  };
-
   return (
     <div className={cn('grid w-full items-center gap-1.5', className)}>
-      <Label htmlFor="image-upload-input" className='mb-2'>{label}</Label>
+      <Label htmlFor="image-upload-input" className="mb-2">{label}</Label>
       <div
         className={cn(
           'relative w-full cursor-pointer rounded-lg border-2 border-dashed transition-colors',
-          'min-h-[100px] hover:border-primary/50',
+          'min-h-[120px] flex items-center justify-center',
+          'hover:border-primary/50',
           isDragOver
             ? 'border-primary bg-primary/10'
             : 'border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50',
-          selectedFile && 'border-solid border-green-500/50 hover:border-green-500/50'
+          previewUrl && 'border-solid border-green-500/50 hover:border-green-500/50'
         )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => {
-          // Trigger klik input saat area diklik, hanya jika belum ada file
           if (!selectedFile) {
             document.getElementById('image-upload-input')?.click();
           }
@@ -135,21 +107,37 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           accept={accept}
           onChange={handleInputChange}
           className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
-          aria-hidden="true" // Sembunyikan input secara visual
+          aria-hidden="true"
         />
-        {renderContent()}
+
+        {previewUrl ? (
+          <div className="relative w-full h-full flex items-center justify-center">
+            <img
+              src={previewUrl}
+              alt="Preview"
+              className="w-full h-full object-cover rounded-lg"
+            />
+            <button
+              type="button"
+              onClick={handleRemoveFile}
+              className="absolute top-2 right-2 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-red-500 dark:hover:bg-gray-700 z-20"
+              aria-label="Hapus file"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center space-y-1 py-4">
+            <Upload className="h-6 w-6 text-gray-500 dark:text-gray-400" />
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Seret & Lepas gambar di sini
+            </p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              atau Klik untuk memilih file
+            </p>
+          </div>
+        )}
       </div>
-      {/* Opsional: Tampilkan pratinjau gambar jika ada */}
-      {selectedFile && (
-        <div className="mt-2 flex justify-center">
-          <img
-            src={URL.createObjectURL(selectedFile)}
-            alt="Pratinjau Gambar"
-            className="max-h-40 w-auto rounded-md object-cover shadow-md"
-            onLoad={() => URL.revokeObjectURL(URL.createObjectURL(selectedFile))}
-          />
-        </div>
-      )}
     </div>
   );
 };

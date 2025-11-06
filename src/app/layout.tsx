@@ -4,7 +4,7 @@ import {NextIntlClientProvider} from 'next-intl';
 import {getLocale} from 'next-intl/server';
 import {ReactNode} from 'react';
 import './globals.css';
-import {ThemeProvider} from '@/components/ThemeProvider';
+import {ThemeProvider} from '@/components/layout/ThemeProvider';
 import {Toaster} from 'sonner';
 
 const inter = Inter({subsets: ['latin']});

@@ -8,17 +8,17 @@ import {
   SidebarTrigger
 } from '@/components/ui/sidebar';
 
-import SearchPanel from '@/components/SearchPanel';
+import SearchPanel from '@/components/layout/SearchPanel';
 import {Toaster} from '@/components/ui/sonner';
-import {UserSetting} from '@/components/user-setting';
-import {MyBreadcrumb} from '@/components/my-breadcrumb';
+import {UserSetting} from '@/components/layout/user-setting';
+import {MyBreadcrumb} from '@/components/layout/my-breadcrumb';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
 import {NavigationMenuDemo} from '@/components/navbar';
-import {TeamSwitcher} from '@/components/team-switcher';
+import {TeamSwitcher} from '@/components/layout/team-switcher';
 import {AudioWaveform, Command, GalleryVerticalEnd} from 'lucide-react';
 // import {MyNotification} from '@/components/Notification';
 import { AppSidebar } from './component/app-sidebar';
-import { NotificationDropdown } from '@/components/MyNotification';
+import { NotificationDropdown } from '@/components/layout/MyNotification';
 
 const teams = [
   {

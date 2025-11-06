@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import {ButtonGroup} from './ui/button-group';
+import {ButtonGroup} from '../ui/button-group';
 
 export function ModeToggle() {
   const {setTheme, theme} = useTheme();

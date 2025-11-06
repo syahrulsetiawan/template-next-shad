@@ -13,10 +13,10 @@ import {
 } from '@/components/ui/sheet';
 import {Settings} from 'lucide-react';
 import {useTranslations} from 'next-intl';
-import LocaleSwitcher from './LocaleSwitcher';
+import LocaleSwitcher from '../LocaleSwitcher';
 import {ModeToggle} from './ToggleDarkmode';
-import {RadioGroup, RadioGroupItem} from './ui/radio-group';
-import {Switch} from './ui/switch';
+import {RadioGroup, RadioGroupItem} from '../ui/radio-group';
+import {Switch} from '../ui/switch';
 
 export function UserSetting() {
   const t = useTranslations('AppLayout');

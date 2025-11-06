@@ -70,7 +70,7 @@ export default function CompanySettingsPage (props: ICompanySettingsProps) {
 
   const handleImageFileChange = (file: File | null) => {
     console.log('File yang dipilih:', file);
-    // setPurchaseImage(file);
+    form.setValue('company_photo', file ? URL.createObjectURL(file) : '');
     // Di sini Anda bisa memicu validasi atau menyimpan file di state utama form
   };
 
@@ -147,6 +147,7 @@ export default function CompanySettingsPage (props: ICompanySettingsProps) {
                                 label={t('form.companyLogo.label') || 'Company Logo'}
                                 onFileChange={handleImageFileChange}
                                 className="mb-6"
+                                initialImage={form.getValues('company_photo')}
                                 // Hanya menerima JPEG dan PNG
                                 accept=".jpg, .jpeg, .png" 
                               />

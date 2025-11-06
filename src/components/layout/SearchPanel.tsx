@@ -10,12 +10,12 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import {Input} from './ui/input';
-import {Button} from './ui/button';
+import {Input} from '../ui/input';
+import {Button} from '../ui/button';
 import {Box, CircleX, Layers, Search, Truck} from 'lucide-react';
-import {Skeleton} from './ui/skeleton';
-import {Separator} from './ui/separator';
-import {Tooltip, TooltipContent, TooltipTrigger} from './ui/tooltip';
+import {Skeleton} from '../ui/skeleton';
+import {Separator} from '../ui/separator';
+import {Tooltip, TooltipContent, TooltipTrigger} from '../ui/tooltip';
 
 export interface ISearchPanelProps {}
 
