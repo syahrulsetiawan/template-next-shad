@@ -15,30 +15,55 @@ import { Textarea } from '@/components/ui/textarea'; // Import Textarea untuk al
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Building, MapPin, Settings } from 'lucide-react';
 import { ImageUploader } from '@/components/form/ImageUploader';
+import { useLoading } from '@/hooks/useLoading';
+import MyFullLoadingPage from '@/components/layout/MyFullLoadingPage';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export interface ICompanySettingsProps {
 }
 
-// SOLUSI: company_website diubah menjadi .url().or(z.literal('')) agar bisa kosong
-const companySettingsSchema = z.object({
-  company_name: z.string().min(1, 'Nama perusahaan wajib diisi.'),
-  company_address: z.string().min(1, 'Alamat perusahaan wajib diisi.'),
-  company_photo: z.string().optional(),
-  company_phone: z.string().min(1, 'Nomor telepon wajib diisi.'),
-  company_email: z.string().email('Format email tidak valid.'),
-  company_website: z.string().url('URL website tidak valid.').or(z.literal('')), // Memperbolehkan string kosong
-  company_tax_number: z.string().min(1, 'Nomor pajak wajib diisi.'),
-  company_country: z.string().min(1, 'Negara wajib diisi.'),
-  company_province: z.string().min(1, 'Provinsi wajib diisi.'),
-  company_city: z.string().min(1, 'Kota wajib diisi.'),
-  company_postal_code: z.string().min(1, 'Kode pos wajib diisi.'),
-});
+const currencyFormatOptions = [
+  { value: '#,###,###', label: '9,999,999' },
+  { value: '#.###.###', label: '9.999.999' },
+];
 
-type ICompanySettingsSchema = z.infer<typeof companySettingsSchema>;
+const dateFormatOptions = [
+  { value: 'd/m/Y', label: '31/12/2023' },
+  { value: 'm/d/Y', label: '12/31/2023' },
+  { value: 'Y/m/d', label: '2023/12/31' },
+  { value: 'Y-d-m', label: '2023-31-12' },
+  { value: 'Y-m-d', label: '2023-12-31' },
+  { value: 'd-m-Y', label: '31-12-2023' },
+  { value: 'm-d-Y', label: '12-31-2023' },
+  { value: 'Y F d', label: '2023 Desember 31' },
+  { value: 'd F Y', label: '31 Desember 2023' },
+  { value: 'F d, Y', label: 'Desember 31, 2023' },
+];
 
 export default function CompanySettingsPage (props: ICompanySettingsProps) {
+  const {isLoading, startLoading, stopLoading} = useLoading();
   // Ganti dengan string literal jika i18n belum disiapkan
   const t = useTranslations('default.CompanySettingsPage'); 
+  const v = useTranslations('common.validation');
+
+  // SOLUSI: company_website diubah menjadi .url().or(z.literal('')) agar bisa kosong
+  const companySettingsSchema = z.object({
+    company_name: z.string().min(1, {message: v('required', {field: t('form.companyName.label') || 'company_name'})}),
+    company_address: z.string().min(1, {message: v('required', {field: t('form.companyAddress.label') || 'company_address'})}),
+    company_photo: z.string().optional(),
+    company_phone: z.string().min(1, {message: v('required', {field: t('form.companyPhone.label') || 'company_phone'})}),
+    company_email: z.string().email({message: v('email', {field: t('form.companyEmail.label') || 'company_email'})}),
+    company_website: z.string().url({message: v('url', {field: t('form.companyWebsite.label') || 'company_website'})}).or(z.literal('')), // Memperbolehkan string kosong
+    company_tax_number: z.string().min(1, {message: v('required', {field: t('form.companyTaxNumber.label') || 'company_tax_number'})}),
+    company_country: z.string().min(1, {message: v('required', {field: t('form.companyCountry.label') || 'company_country'})}),
+    company_province: z.string().min(1, {message: v('required', {field: t('form.companyProvince.label') || 'company_province'})}),
+    company_city: z.string().min(1, {message: v('required', {field: t('form.companyCity.label') || 'company_city'})}),
+    company_postal_code: z.string().min(1, {message: v('required', {field: t('form.companyPostalCode.label') || 'company_postal_code'})}),
+    config_dateformat: z.enum(dateFormatOptions.map(opt => opt.value), {message: v('enum')}),
+    config_currencyformat: z.enum(currencyFormatOptions.map(opt => opt.value), {message: v('enum')}),
+  });
+  
+  type ICompanySettingsSchema = z.infer<typeof companySettingsSchema>;
   
   const form = useForm<ICompanySettingsSchema>({
     resolver: zodResolver(companySettingsSchema),
@@ -54,6 +79,9 @@ export default function CompanySettingsPage (props: ICompanySettingsProps) {
         company_province: '',
         company_city: '',
         company_postal_code: '',
+
+        config_dateformat: 'd F Y',
+        config_currencyformat: '#.###.###'
     }
   })
 
@@ -73,6 +101,13 @@ export default function CompanySettingsPage (props: ICompanySettingsProps) {
     form.setValue('company_photo', file ? URL.createObjectURL(file) : '');
     // Di sini Anda bisa memicu validasi atau menyimpan file di state utama form
   };
+
+  React.useEffect(() => {
+    startLoading();
+    setTimeout(() => {
+      stopLoading();
+    }, 1000);
+  }, []);
 
   const renderInputField = (name: keyof ICompanySettingsSchema, label: string, placeholder: string, type: string = 'text') => (
     <FormField
@@ -104,6 +139,7 @@ export default function CompanySettingsPage (props: ICompanySettingsProps) {
   
   return (
     <div className="p-4 md:p-8">
+      <MyFullLoadingPage isLoading={isLoading} />
       <Card>
         <CardHeader>
           <h1 className="text-2xl text-foreground font-bold">{t('title') || 'Pengaturan Perusahaan'}</h1>
@@ -171,14 +207,14 @@ export default function CompanySettingsPage (props: ICompanySettingsProps) {
 
                       {/* --- BAGIAN ALAMAT (Memakai 2 kolom penuh untuk Address) --- */}
                       <div className="md:col-span-2">
-                        {renderInputField('company_address', 'Alamat Lengkap', 'Masukkan alamat lengkap perusahaan')}
+                        {renderInputField('company_address', t('form.companyAddress.label'), t('form.companyAddress.placeholder'))}
                       </div>
 
                       {/* --- BAGIAN LOKASI (2 Kolom) --- */}
-                      {renderInputField('company_country', 'Negara', 'Contoh: Indonesia')}
-                      {renderInputField('company_province', 'Provinsi', 'Contoh: DKI Jakarta')}
-                      {renderInputField('company_city', 'Kota/Kabupaten', 'Contoh: Jakarta Pusat')}
-                      {renderInputField('company_postal_code', 'Kode Pos', 'Contoh: 10110')}
+                      {renderInputField('company_country', t('form.companyCountry.label'), t('form.companyCountry.placeholder'))}
+                      {renderInputField('company_province', t('form.companyProvince.label'), t('form.companyProvince.placeholder'))}
+                      {renderInputField('company_city', t('form.companyCity.label'), t('form.companyCity.placeholder'))}
+                      {renderInputField('company_postal_code', t('form.companyPostalCode.label'), t('form.companyPostalCode.placeholder'))}
                     </div>
                   </AccordionContent>
                 </AccordionItem>
@@ -190,16 +226,69 @@ export default function CompanySettingsPage (props: ICompanySettingsProps) {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="flex flex-col gap-4 text-balance">
-                    <p>
-                      We stand behind our products with a comprehensive 30-day return
-                      policy. If you&apos;re not completely satisfied, simply return the
-                      item in its original condition.
-                    </p>
-                    <p>
-                      Our hassle-free return process includes free return shipping and
-                      full refunds processed within 48 hours of receiving the returned
-                      item.
-                    </p>
+                    <div className="block md:grid grid-cols-2 gap-6 p-2">
+                      {/* --- BAGIAN KONFIGURASI --- */}
+                      <FormField
+                        control={form.control}
+                        name="config_dateformat"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t('form.configDateFormat.label')}</FormLabel>
+                            <FormControl>
+                              <Select
+                                value={field.value}               // <-- bind ke field.value
+                                onValueChange={(val) => field.onChange(val)} // <-- panggil onChange form
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select a date format" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    <SelectLabel>Date Format</SelectLabel>
+                                    {dateFormatOptions.map((option) => (
+                                      <SelectItem key={option.value} value={option.value}>
+                                        {option.label}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="config_dateformat"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t('form.configCurrencyFormat.label')}</FormLabel>
+                            <FormControl>
+                              <Select
+                                value={field.value}               // <-- bind ke field.value
+                                onValueChange={(val) => field.onChange(val)} // <-- panggil onChange form
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Select a currency format" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    <SelectLabel>Currency Format</SelectLabel>
+                                    {currencyFormatOptions.map((option) => (
+                                      <SelectItem key={option.value} value={option.value}>
+                                        {option.label}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -210,7 +299,7 @@ export default function CompanySettingsPage (props: ICompanySettingsProps) {
                       type="submit"
                       disabled={form.formState.isSubmitting}
                   >
-                      {form.formState.isSubmitting ? 'Menyimpan...' : 'Simpan Perubahan'}
+                      {form.formState.isSubmitting ? t('button.loading') : t('button.save')}
                   </Button>
               </div>
             </form>

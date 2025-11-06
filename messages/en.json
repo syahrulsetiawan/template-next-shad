@@ -123,7 +123,19 @@
         "companyPostalCode": {
           "label": "Company Postal Code",
           "placeholder": "Enter your company postal code"
+        },
+        "configDateFormat": {
+          "label": "Date Format",
+          "placeholder": "Select your preferred date format"
+        },
+        "configCurrencyFormat": {
+          "label": "Currency Format",
+          "placeholder": "Select your preferred currency format"
         }
+      },
+      "button": {
+        "save": "Save Changes",
+        "loading": "Saving..."
       }
     }
   },
@@ -160,6 +172,7 @@
       "required": "{field} is required.",
       "minLength": "Minimum length is {min} characters.",
       "maxLength": "Maximum length is {max} characters.",
+      "enum": "Please select a valid option.",
       "email": "Please enter a valid email address.",
       "number": "Please enter a valid number.",
       "size": "Size must be between {min} and {max}.",

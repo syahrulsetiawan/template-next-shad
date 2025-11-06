@@ -123,7 +123,19 @@
         "companyPostalCode": {
           "label": "Kode Pos",
           "placeholder": "Masukkan kode pos perusahaan Anda"
+        },
+        "configDateFormat": {
+          "label": "Format Tanggal",
+          "placeholder": "Pilih format tanggal"
+        },
+        "configCurrencyFormat": {
+          "label": "Format Mata Uang",
+          "placeholder": "Pilih format mata uang"
         }
+      },
+      "button":{
+        "save": "Simpan Perubahan",
+        "loading": "Menyimpan..."
       }
     }
   },
@@ -156,6 +168,7 @@
       "minLength": "Panjang minimum {min} karakter.",
       "maxLength": "Panjang maksimum {max} karakter.",
       "email": "Silakan masukkan alamat email yang valid.",
+      "enum": "Mohon untuk pilih salah satu.",
       "number": "Silakan masukkan angka yang valid.",
       "size": "Ukuran harus antara {min} dan {max}.",
       "integer": "Silakan masukkan bilangan bulat yang valid.",

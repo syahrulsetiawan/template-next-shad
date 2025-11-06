@@ -12,6 +12,7 @@ interface ImageUploaderProps {
   className?: string;
   accept?: string;
   initialImage?: string; // URL image existing
+  maxFileSizeMB?: number; // default 2MB
 }
 
 export const ImageUploader: React.FC<ImageUploaderProps> = ({
@@ -20,28 +21,43 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   className,
   accept = 'image/*',
   initialImage,
+  maxFileSizeMB = 2, // default 2MB
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(initialImage || null);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [isUploading, setIsUploading] = useState(false); // loader state
 
   useEffect(() => {
-    // kalau props initialImage berubah, update preview
     if (initialImage) {
       setPreviewUrl(initialImage);
     }
   }, [initialImage]);
 
   const handleFileChange = (file: File | null) => {
-    setSelectedFile(file);
-    onFileChange(file);
-
     if (file) {
+      // validasi ukuran file
+      if (file.size > maxFileSizeMB * 1024 * 1024) {
+        alert(`Ukuran file maksimal ${maxFileSizeMB} MB`);
+        return;
+      }
+
+      setIsUploading(true);
+
+      // simulasi delay proses upload
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
+
+      setTimeout(() => {
+        setSelectedFile(file);
+        onFileChange(file);
+        setIsUploading(false);
+      }, 500); // bisa ganti dengan upload async sebenarnya
     } else {
       if (selectedFile) URL.revokeObjectURL(previewUrl!);
       setPreviewUrl(initialImage || null);
+      setSelectedFile(null);
+      onFileChange(null);
     }
   };
 
@@ -72,10 +88,12 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     setIsDragOver(false);
     const file = event.dataTransfer.files?.[0];
 
-    if (file && file.type.startsWith('image/')) {
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Hanya file gambar yang diizinkan!');
+        return;
+      }
       handleFileChange(file);
-    } else if (file) {
-      alert('Hanya file gambar yang diizinkan!');
     }
   }, []);
 
@@ -115,8 +133,15 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
             <img
               src={previewUrl}
               alt="Preview"
-              className="w-full h-full object-cover rounded-lg"
+              className={cn("w-full h-full object-cover rounded-lg", isUploading && "opacity-50")}
             />
+
+            {isUploading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg">
+                <div className="loader border-t-2 border-b-2 border-white w-6 h-6 rounded-full animate-spin"></div>
+              </div>
+            )}
+
             <button
               type="button"
               onClick={handleRemoveFile}
@@ -138,6 +163,16 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           </div>
         )}
       </div>
+
+      {/* Loader CSS */}
+      <style jsx>{`
+        .loader {
+          border-top-color: transparent;
+          border-right-color: white;
+          border-left-color: white;
+          border-bottom-color: white;
+        }
+      `}</style>
     </div>
   );
 };

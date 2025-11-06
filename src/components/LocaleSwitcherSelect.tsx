@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import {useTransition} from 'react';
 import {Locale} from '@/i18n/config';
 import {setUserLocale} from '@/services/locale';
+import { useLoading } from '@/hooks/useLoading';
 
 type Props = {
   defaultValue: string;
@@ -19,11 +20,14 @@ export default function LocaleSwitcherSelect({
   label
 }: Props) {
   const [isPending, startTransition] = useTransition();
+  const {startLoading, stopLoading} = useLoading();
 
   function onChange(value: string) {
+    startLoading();
     const locale = value as Locale;
     startTransition(() => {
       setUserLocale(locale);
+      stopLoading();
     });
   }
 
