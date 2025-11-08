@@ -44,12 +44,8 @@ export default function CompanySettingsPage (props: ICompanySettingsProps) {
   const t = useTranslations('default.CompanySettingsPage'); 
   const v = useTranslations('common.validation');
 
-  // Dapatkan daftar nilai format tanggal yang sudah terjamin isinya (karena `as const`)
   const dateValues = dateFormatOptions.map(opt => opt.value);
-  // Dapatkan daftar nilai format mata uang yang sudah terjamin isinya (karena `as const`)
   const currencyValues = currencyFormatOptions.map(opt => opt.value);
-
-  // company_website diubah menjadi .url().or(z.literal('')) agar bisa kosong
   const companySettingsSchema = z.object({
     company_name: z.string().min(1, {message: v('required', {field: t('form.companyName.label') || 'company_name'})}),
     company_address: z.string().min(1, {message: v('required', {field: t('form.companyAddress.label') || 'company_address'})}),
