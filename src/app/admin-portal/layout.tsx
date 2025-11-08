@@ -63,8 +63,8 @@ export default function AppLayout({children}: {children: ReactNode}) {
               </div>
             </div>
           </header>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            <main>{children}</main>
+          <div className="flex flex-col justify-start item-center gap-4 p-4 pt-0 ">
+            <main className='lg:max-w-7xl'>{children}</main>
           </div>
           <Toaster richColors />
         </SidebarInset>
