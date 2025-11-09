@@ -3,7 +3,9 @@ import {
   Download,
   Glasses,
   History,
+  IdCard,
   MapPin,
+  Network,
   PieChart,
   Settings,
   SlidersHorizontal,
@@ -67,8 +69,20 @@ export const AdminPortalPlatform = [
 
 export const AdminPortalUserThings = [
   {
-    title: 'users_settings',
+    title: 'departments',
     url: '/admin-portal/users-settings',
+    icon: Network,
+    is_owner_only: false
+  },
+  {
+    title: 'user_levels',
+    url: '/admin-portal/users-levels',
+    icon: IdCard,
+    is_owner_only: false
+  },
+  {
+    title: 'employees',
+    url: '/admin-portal/employees',
     icon: Users,
     is_owner_only: false
   },

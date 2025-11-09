@@ -53,7 +53,9 @@ export default function AppLayout({children}: {children: ReactNode}) {
                   orientation="vertical"
                   className="mr-2 data-[orientation=vertical]:h-4"
                 />
+                <div className="hidden md:block">
                 <MyBreadcrumb />
+                </div>
               </div>
               <div className="flex items-center gap-2 px-4">
                 <SearchPanel />
@@ -64,6 +66,9 @@ export default function AppLayout({children}: {children: ReactNode}) {
             </div>
           </header>
           <div className="flex flex-col justify-start item-center gap-4 p-4 pt-0 ">
+            <div className="block md:hidden">
+              <MyBreadcrumb />
+            </div>
             <main className='lg:max-w-7xl'>{children}</main>
           </div>
           <Toaster richColors />

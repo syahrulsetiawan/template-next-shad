@@ -1,4 +1,5 @@
 'use client';
+
 import React from 'react';
 import {
   Breadcrumb,
@@ -6,38 +7,37 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator
-} from '../ui/breadcrumb';
-import {usePathname} from 'next/navigation';
-import {useTranslations} from 'next-intl';
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
+import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
-export const MyBreadcrumb = () => {
-  const segments = usePathname().split('/').filter(Boolean);
+export const MyBreadcrumb: React.FC = () => {
+  const pathname = usePathname();
+  const segments = pathname.split('/').filter(Boolean);
   const t = useTranslations('breadcrumb');
+
   return (
-    <>
-      <Breadcrumb>
-        <BreadcrumbList>
-          {segments.map((segment, index) =>
-            index < segments.length - 1 ? (
-              <>
-                <BreadcrumbItem key={index}>
-                  <BreadcrumbLink
-                    href={`/${segments.slice(0, index + 1).join('/')}`}
-                  >
-                    {t(segment)}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-              </>
-            ) : (
-              <BreadcrumbItem key={index}>
-                <BreadcrumbPage>{t(segment)}</BreadcrumbPage>
+    <Breadcrumb>
+      <BreadcrumbList>
+        {segments.map((segment, index) => {
+          const href = `/${segments.slice(0, index + 1).join('/')}`;
+          const isLast = index === segments.length - 1;
+
+          return (
+            <React.Fragment key={href}>
+              <BreadcrumbItem>
+                {isLast ? (
+                  <BreadcrumbPage>{t(segment)}</BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink href={href}>{t(segment)}</BreadcrumbLink>
+                )}
               </BreadcrumbItem>
-            )
-          )}
-        </BreadcrumbList>
-      </Breadcrumb>
-    </>
+              {!isLast && <BreadcrumbSeparator />}
+            </React.Fragment>
+          );
+        })}
+      </BreadcrumbList>
+    </Breadcrumb>
   );
 };

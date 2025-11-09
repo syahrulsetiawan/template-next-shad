@@ -32,10 +32,10 @@ export default function Page() {
     <div className="">
       <MyFullLoadingPage isLoading={isLoading} />
       <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <div className="bg-muted/50 aspect-video rounded-xl p-4">
+        <div className="bg-muted/50 rounded-xl p-4">
           <Button size={'sm'}>Primary</Button>
         </div>
-        <div className="bg-muted/50 aspect-video rounded-xl p-4">
+        <div className="bg-muted/50 rounded-xl p-4">
           <SingleImageViewer
             src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d"
             alt="Sample"
@@ -52,11 +52,11 @@ export default function Page() {
             />
           </div>
           <div className="flex justify-center items-center bg-muted/10 p-4">
-            <ImageCarousel images={images} width={300} height={200} rounded />
+            {/* <ImageCarousel images={images} width={300} height={200} rounded /> */}
           </div>
         </div>
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
+        <div className="bg-muted/50 rounded-xl" />
+        <div className="bg-muted/50 rounded-xl" />
       </div>
       <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
     </div>

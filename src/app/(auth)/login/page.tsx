@@ -27,11 +27,15 @@ import Link from 'next/link';
 
 // --- Import hook yang baru dibuat ---
 import {useUserLogin} from '@/hooks/useUserLogin'; // Asumsikan path hook Anda
+import { useTheme } from 'next-themes';
+import LogoLight from '@/components/image/LogoLight';
+import LogoDark from '@/components/image/LogoDark';
 
 export default function LoginPage() {
   const t = useTranslations('LoginPage');
   const e = useTranslations('errorResponse');
   const v = useTranslations('common.validation');
+  const {theme} = useTheme();
   const locale = useLocale();
 
   // --- Gunakan hook yang baru ---
@@ -107,14 +111,15 @@ export default function LoginPage() {
 
   return (
     // ... Bagian Render (tetap sama) ...
-    <div className="border flex flex-col items-center justify-center">
-      <div className="w-screen h-screen border block lg:flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
+      <div className="w-screen h-screen block md:flex items-center justify-center">
         {/* form */}
-        <div className="w-1/2 h-full bg-background flex flex-col justify-between">
+        <div className="w-full md:w-1/2 h-full bg-background flex flex-col justify-between">
           <div className="p-4 flex justify-end">
             <LocaleSwitcher />
           </div>
           <div className="flex flex-col items-center pb-12">
+            {theme === 'dark' || theme === 'system' ? <LogoLight /> : <LogoDark />}
             <h5 className="text-lg text-foreground">{t('login')}</h5>
             <p className="text-muted-foreground mb-8">{t('description')}</p>
 
@@ -215,7 +220,7 @@ export default function LoginPage() {
           </div>
         </div>
         {/* Background Image */}
-        <div className="w-1/2 h-full relative flex justify-end p-4">
+        <div className="hidden md:flex w-1/2 h-full relative justify-end p-4">
           <Image
             src="/login-bg.png"
             alt="Login Illustration"

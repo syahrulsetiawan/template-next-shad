@@ -4,6 +4,9 @@
     "company_settings": "Pengaturan Perusahaan",
     "company_operational_zone_settings": "Zona Operasional",
     "company_branches_settings": "Cabang Perusahaan",
+    "departments": "Departemen",
+    "user_levels": "Pangkat & Jabatan",
+    "employees": "Karyawan",
     "users_settings": "Pengguna",
     "roles_settings": "Perizinan",
     "master_data_settings": "Data Master",
@@ -66,6 +69,38 @@
     "success": "Pendaftaran berhasil! Silakan masuk.",
     "alreadyRegistered": "Sudah punya akun?",
     "loginLink": "Masuk di sini.",
+    "invalidPasswordConfirmation": "Kata sandi tidak cocok."
+  },
+  "ForgotPasswordPage": {
+    "title": "Lupa Kata Sandi?",
+    "description": "Masukkan email Anda untuk mengatur ulang kata sandi. Kami akan mengirimkan tautan pengaturan ulang ke email Anda.",
+    "form":{
+      "email": {
+        "label": "Email",
+        "placeholder": "Masukkan email Anda"
+      },
+      "submit": "Atur Ulang Kata Sandi"
+    },
+    "backToLogin": "Ingat Kata Sandi? Kembali ke halaman masuk.",
+    "success": "Tautan pengaturan ulang kata sandi telah dikirim ke email Anda.",
+    "invalidEmail": "Silakan masukkan alamat email yang valid."
+  },
+  "ResetPasswordPage": {
+    "title": "Reset Kata Sandi Anda",
+    "description": "Masukkan kata sandi baru Anda.",
+    "form":{
+      "password": {
+        "label": "Kata Sandi Baru",
+        "placeholder": "Masukkan kata sandi baru Anda"
+      },
+      "password_confirmation": {
+        "label": "Konfirmasi Kata Sandi Baru",
+        "placeholder": "Masukkan kata sandi baru Anda lagi"
+      },
+      "submit": "Reset Kata Sandi"
+    },
+    "backToLogin": "Ingat Kata Sandi? Kembali ke halaman login.",
+    "success": "Kata sandi Anda telah berhasil direset.",
     "invalidPasswordConfirmation": "Kata sandi tidak cocok."
   },
   "ProfilePage": {
@@ -181,7 +216,8 @@
       "dateTime": "Silakan masukkan tanggal dan waktu yang valid.",
       "pattern": "Silakan cocokkan format yang diminta.",
       "confirmation": "Apakah Anda yakin ingin melanjutkan?",
-      "success": "Operasi berhasil diselesaikan."
+      "success": "Operasi berhasil diselesaikan.",
+      "invalidPasswordConfirmation": "Kata sandi tidak cocok."
     },
     "save": "Simpan",
     "cancel": "Batal",

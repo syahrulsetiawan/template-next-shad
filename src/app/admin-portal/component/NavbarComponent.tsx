@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/sidebar';
 import {useTranslations} from 'next-intl';
 import {usePathname, useSelectedLayoutSegment} from 'next/navigation';
+import Link from 'next/link';
 
 export function NavbarComponent({
   groupLabel,
@@ -72,9 +73,9 @@ export function NavbarComponent({
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                            <Link href={subItem.url}>
                               <span>{t(subItem.title)}</span>
-                            </a>
+                            </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
@@ -91,10 +92,10 @@ export function NavbarComponent({
                   tooltip={item.title}
                   isActive={segment === item.url}
                 >
-                  <a href={item.url} className="flex items-center gap-2 w-full">
+                  <Link href={item.url} className="flex items-center gap-2 w-full">
                     {item.icon && <item.icon />}
                     <span className={segment == item.url ? "font-semibold" : ""}>{t(item.title)}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             );

@@ -4,6 +4,9 @@
     "company_settings": "Company Settings",
     "company_operational_zone_settings": "Operational Zone",
     "company_branches_settings": "Company Branches",
+    "departments": "Departments",
+    "user_levels": "User Levels & Positions",
+    "employees": "Employees",
     "users_settings": "Users Settings",
     "roles_settings": "Roles & Permissions",
     "master_data_settings": "Master Data",
@@ -66,6 +69,38 @@
     "success": "Registration successful! Please sign in.",
     "alreadyRegistered": "Already have an account?",
     "loginLink": "Sign in here.",
+    "invalidPasswordConfirmation": "Passwords do not match."
+  },
+  "ForgotPasswordPage": {
+    "title": "Forgot Your Password?",
+    "description": "Enter your email to reset your password. We will send a reset link to your email.",
+    "form":{
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email address"
+      },
+      "submit": "Reset Password"
+    },
+    "backToLogin": "Remember Your Password? Back to login page.",
+    "success": "A password reset link has been sent to your email.",
+    "invalidEmail": "Please enter a valid email address."
+  },
+  "ResetPasswordPage": {
+    "title": "Reset Your Password",
+    "description": "Enter your new password.",
+    "form":{
+      "password": {
+        "label": "New Password",
+        "placeholder": "Enter your new password"
+      },
+      "password_confirmation": {
+        "label": "Confirm New Password",
+        "placeholder": "Enter your new password again"
+      },
+      "submit": "Reset Password"
+    },
+    "backToLogin": "Remember Your Password? Back to login page.",
+    "success": "Your password has been reset successfully.",
     "invalidPasswordConfirmation": "Passwords do not match."
   },
   "ProfilePage": {
@@ -186,7 +221,8 @@
       "dateTime": "Please enter a valid date and time.",
       "pattern": "Please match the requested format.",
       "confirmation": "Are you sure you want to proceed?",
-      "success": "Operation completed successfully."
+      "success": "Operation completed successfully.",
+      "invalidPasswordConfirmation": "Passwords do not match."
     },
     "save": "Save",
     "cancel": "Cancel",
