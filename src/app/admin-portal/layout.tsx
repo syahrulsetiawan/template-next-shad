@@ -69,7 +69,7 @@ export default function AppLayout({children}: {children: ReactNode}) {
             <div className="block md:hidden">
               <MyBreadcrumb />
             </div>
-            <main className='lg:max-w-7xl'>{children}</main>
+            <main className=' '>{children}</main>
           </div>
           <Toaster richColors />
         </SidebarInset>

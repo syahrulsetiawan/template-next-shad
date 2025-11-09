@@ -26,7 +26,8 @@
   "breadcrumb": {
     "home": "Home",
     "admin-portal": "Admin Portal",
-    "company-settings": "Company Settings"
+    "company-settings": "Company Settings",
+    "operational-zone-settings": "Operational Zone Settings"
   },
   "AppLayout": {
     "home": "Home",
@@ -172,6 +173,10 @@
         "save": "Save Changes",
         "loading": "Saving..."
       }
+    },
+    "OperationalZonePage": {
+      "title": "Master Operational Zone",
+      "description": "Manage all key business locations here. This data ensures accurate reporting and delivery."
     }
   },
   

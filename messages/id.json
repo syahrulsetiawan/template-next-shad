@@ -25,7 +25,8 @@
   "breadcrumb": {
     "home": "Beranda",
     "admin-portal": "Portal Admin",
-    "company-settings": "Pengaturan Perusahaan"
+    "company-settings": "Pengaturan Perusahaan",
+    "operational-zone-settings": "Wilayah Operasional"
   },
   "AppLayout": {
     "home": "Beranda",
@@ -172,6 +173,10 @@
         "save": "Simpan Perubahan",
         "loading": "Menyimpan..."
       }
+    },
+    "OperationalZonePage": {
+      "title": "Master Wilayah Operational",
+      "description": "Tempat Anda memetakan seluruh lokasi penting bisnis. Data ini memastikan ketepatan laporan dan pengiriman barang."
     }
   },
   
