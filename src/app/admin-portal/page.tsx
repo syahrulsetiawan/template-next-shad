@@ -4,6 +4,7 @@ import { ImageCarousel } from '@/components/image/ImageCarousel';
 import { ImageGallery } from '@/components/image/ImageGallery';
 import { SingleImageViewer } from '@/components/image/SingleImageViewer';
 import MyFullLoadingPage from '@/components/layout/MyFullLoadingPage';
+import {AsyncSelect} from '@/components/custom/AsyncSelect';
 import {Button} from '@/components/ui/button';
 import {useLoading} from '@/hooks/useLoading';
 import {useEffect} from 'react';
@@ -32,8 +33,29 @@ export default function Page() {
     <div className="">
       <MyFullLoadingPage isLoading={isLoading} />
       <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <div className="bg-muted/50 rounded-xl p-4">
-          <Button size={'sm'}>Primary</Button>
+        <div className="bg-muted/50 aspect-video rounded-xl p-4">
+          <div className="grid gap-2">
+            <div>
+              <Button size={'sm'}>Primary</Button>
+            </div>
+
+            <AsyncSelect
+              label="Static"
+              options={[
+                {label: 'Active', value: 'active'},
+                {label: 'Inactive', value: 'inactive'}
+              ]}
+              onChange={(v) => console.log(v)}
+            />
+
+            <AsyncSelect
+              label="With data source"
+              fetchUrl="/customers"
+              placeholder="Select Customer..."
+              params={{projectid: 2}}
+              onChange={(v) => console.log(v)}
+            />
+          </div>
         </div>
         <div className="bg-muted/50 rounded-xl p-4">
           <SingleImageViewer
