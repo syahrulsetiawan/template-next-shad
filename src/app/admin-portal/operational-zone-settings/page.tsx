@@ -7,6 +7,7 @@ import { useLoading } from '@/hooks/useLoading';
 import { ArrowRight, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import * as React from 'react';
+import ListingOperationalZone from './section/ListingOperationalZone';
 
 export interface IPageProps {
 }
@@ -39,7 +40,7 @@ export default function Page(props: IPageProps) {
             </Button>
           </div>
         </div>
-        <div className="w-full grid grid-cols-3 gap-2">
+        <div className="w-full grid grid-cols-2 gap-2">
           <div>
             <Card>
               <CardHeader>
@@ -49,8 +50,7 @@ export default function Page(props: IPageProps) {
                 </p>
               </CardHeader>
               <CardContent>
-                <Table>
-                  {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+                {/* <Table>
                   <TableHeader>
                     <TableRow className='bg-muted hover:bg-muted'>
                       <TableHead className="font-medium">Name</TableHead>
@@ -89,11 +89,13 @@ export default function Page(props: IPageProps) {
                       </TableCell>
                     </TableRow>
                   </TableBody>
-                </Table>
+                </Table> */}
+
+                <ListingOperationalZone />
               </CardContent>
             </Card>
           </div>
-          <div className="col-span-2">
+          <div>
             <Card>
               <CardHeader>
                 <h2 className="text-lg font-bold">Detail Zona Wilayah</h2>
