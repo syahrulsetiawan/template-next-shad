@@ -1,11 +1,34 @@
 'use client'
 
-import { MySimpleDataTable } from '@/components/table/MySimpleDataTable'
+import { actionProps, MySimpleDataTable } from '@/components/table/MySimpleDataTable'
 import { userColumns } from './ListingColumn'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Filter } from 'lucide-react'
+import { Filter, Pencil, Trash } from 'lucide-react'
+import { ListingFilter } from './ListringFilter'
+
+
+const actions: actionProps[] = [
+  {
+    label: 'Edit',
+    color: 'primary',
+    icon: <Pencil size={14} />,
+    onClick: () => { console.log('Edit clicked') }
+  },
+  {
+    label: 'Secondary',
+    color: 'secondary',
+    disabled: true,
+    onClick: () => { console.log('Edit clicked') }
+  },
+  {
+    label: 'Delete',
+    color: 'danger',
+    icon: <Trash size={14} />,
+    onClick: () => { console.log('Delete clicked') }
+  }
+]
 
 export default function ListingOperationalZone() {
   const data = [
@@ -15,7 +38,7 @@ export default function ListingOperationalZone() {
   ]
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-4">
       <MySimpleDataTable
         data={data}
         columns={userColumns}
@@ -23,22 +46,10 @@ export default function ListingOperationalZone() {
         withPagination
         searchColumnKey="name"
         filter={
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button variant={'ghost'} size={'sm'}>
-                  <Filter className='h-4 w-4' />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <ListingFilter />
         }
+        withAction
+        actions={actions}
       />
     </div>
   )

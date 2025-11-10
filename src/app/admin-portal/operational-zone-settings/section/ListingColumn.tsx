@@ -28,4 +28,19 @@ export const userColumns: ColumnDef<User>[] = [
     header: 'Peran',
     meta: { align: 'center' },
   },
+  {
+    accessorKey: 'name',
+    header: 'Nama',
+    meta: { align: 'left' },
+  },
+  {
+    accessorKey: 'email',
+    header: 'Email',
+    meta: { align: 'left' },
+  },
+  {
+    accessorKey: 'role',
+    header: 'Peran',
+    meta: { align: 'center' },
+  },
 ]

@@ -5,13 +5,15 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
   useReactTable,
 } from '@tanstack/react-table'
-import { ChevronDown, ChevronUp, ChevronsUpDown, Search } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronUp,
+  ChevronsUpDown,
+  EllipsisVertical,
+  Search,
+} from 'lucide-react'
 
 import {
   Table,
@@ -22,13 +24,30 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '../ui/input-group'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu'
 
 // -----------------------------------------------------------------------------
 // INTERFACE
 // -----------------------------------------------------------------------------
+export interface actionProps {
+  label: string
+  color?: 'default' | 'primary' | 'secondary' | 'warning' | 'success' | 'danger'
+  icon?: React.ReactNode
+  disabled?: boolean
+  onClick: () => void
+}
+
 interface MySimpleDataTableProps<TData, TValue> {
   data: TData[]
   columns: ColumnDef<TData, TValue>[]
@@ -36,6 +55,20 @@ interface MySimpleDataTableProps<TData, TValue> {
   withPagination?: boolean
   searchColumnKey?: keyof TData
   filter?: React.ReactNode
+  withAction?: boolean
+  actions?: actionProps[]
+
+  // ---- External handlers
+  onSortChange?: (sortBy: string, sortOrder: 'asc' | 'desc') => void
+  onSearch?: (keyword: string) => void
+  onPageChange?: (pageIndex: number) => void
+
+  // ---- Controlled states
+  sortBy?: string
+  sortOrder?: 'asc' | 'desc'
+  pageIndex?: number
+  pageCount?: number
+  isLoading?: boolean
 }
 
 // -----------------------------------------------------------------------------
@@ -47,10 +80,19 @@ export function MySimpleDataTable<TData, TValue>({
   withSearch = false,
   withPagination = false,
   searchColumnKey = 'name' as keyof TData,
-  filter
+  filter,
+  withAction = false,
+  actions,
+  onSortChange,
+  onSearch,
+  onPageChange,
+  sortBy,
+  sortOrder,
+  pageIndex = 0,
+  pageCount = 1,
+  isLoading = false,
 }: MySimpleDataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [globalFilter, setGlobalFilter] = React.useState('')
+  const [keyword, setKeyword] = React.useState('')
 
   // ---------------------------------------------------------------------------
   // Utility: cek apakah kolom punya accessorKey
@@ -61,37 +103,39 @@ export function MySimpleDataTable<TData, TValue>({
     'accessorKey' in col && typeof (col as any).accessorKey === 'string'
 
   // ---------------------------------------------------------------------------
-  // Tambahkan ikon sorting di header kolom
+  // Inject tombol sorting di header kolom
   // ---------------------------------------------------------------------------
   const columns = React.useMemo<ColumnDef<TData, TValue>[]>(() => {
     return initialColumns.map((col) => {
       const isSortable = hasAccessorKey(col) || !!col.id
 
-      // Kalau header-nya string → buatkan tombol sorting otomatis
       if (isSortable && typeof col.header === 'string') {
         const headerText = col.header
 
         return {
           ...col,
           id: col.id ?? (hasAccessorKey(col) ? col.accessorKey : headerText),
-          header: ({ column }) => {
-            const canSort = column.getCanSort()
-            const sortedState = column.getIsSorted()
+          header: () => {
+            const sortKey = hasAccessorKey(col)
+              ? col.accessorKey
+              : (col.id ?? headerText)
+
+            const isActive = sortBy === sortKey
             const SortIcon =
-              sortedState === 'asc'
+              isActive && sortOrder === 'asc'
                 ? ChevronUp
-                : sortedState === 'desc'
+                : isActive && sortOrder === 'desc'
                 ? ChevronDown
                 : ChevronsUpDown
-
-            if (!canSort) return <div className="font-semibold">{headerText}</div>
 
             return (
               <Button
                 variant="ghost"
-                onClick={() =>
-                  column.toggleSorting(column.getIsSorted() === 'asc', true)
-                }
+                onClick={() => {
+                  const newOrder =
+                    sortBy === sortKey && sortOrder === 'asc' ? 'desc' : 'asc'
+                  onSortChange?.(sortKey, newOrder)
+                }}
                 className="p-2 h-auto font-semibold"
               >
                 {headerText}
@@ -104,22 +148,25 @@ export function MySimpleDataTable<TData, TValue>({
 
       return col
     })
-  }, [initialColumns])
+  }, [initialColumns, sortBy, sortOrder, onSortChange])
 
   // ---------------------------------------------------------------------------
-  // Inisialisasi tabel
+  // Inisialisasi React Table (tanpa sorting/pagination internal)
   // ---------------------------------------------------------------------------
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
-    getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
-    ...(withPagination && { getPaginationRowModel: getPaginationRowModel() }),
-    state: { sorting, globalFilter },
   })
+
+  // ---------------------------------------------------------------------------
+  // Event: Search Input
+  // ---------------------------------------------------------------------------
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setKeyword(value)
+    onSearch?.(value)
+  }
 
   // ---------------------------------------------------------------------------
   // RENDER
@@ -128,18 +175,21 @@ export function MySimpleDataTable<TData, TValue>({
     <div className="w-full">
       {/* Search Input */}
       {withSearch && (
-        <div className="w-full flex items-center justify-end gap-2 mb-2">
-          { filter && (filter) }
-          <InputGroup className='w-[200px]'>
-            <InputGroupInput placeholder="Search..." />
+        <div className="w-full flex items-center justify-start gap-2 mb-2">
+          {filter && filter}
+          <InputGroup className="w-[200px]">
+            <InputGroupInput
+              placeholder="Search..."
+              maxLength={30}
+              value={keyword}
+              onChange={handleSearchChange}
+            />
             <InputGroupAddon>
               <Search />
             </InputGroupAddon>
           </InputGroup>
         </div>
       )}
-
-      
 
       {/* Table */}
       <div className="rounded-md border">
@@ -166,13 +216,24 @@ export function MySimpleDataTable<TData, TValue>({
                         )}
                   </TableHead>
                 ))}
+
+                {/* action header */}
+                {withAction && (
+                  <TableHead className="w-12 text-center"></TableHead>
+                )}
               </TableRow>
             ))}
           </TableHeader>
 
           {/* Body */}
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center py-6">
+                  Loading...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -191,14 +252,52 @@ export function MySimpleDataTable<TData, TValue>({
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
+
+                  {/* action cell */}
+                  {withAction && (
+                    <TableCell className="w-12 text-center">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant={'ghost'} size={'icon'}>
+                            <EllipsisVertical size={14} />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          {actions?.map((action, index) => (
+                            <DropdownMenuItem
+                              key={index}
+                              onClick={action.onClick}
+                              className={cn(
+                                action.color === 'primary' &&
+                                  'text-primary cursor-pointer',
+                                action.disabled &&
+                                  'text-muted-foreground cursor-not-allowed',
+                                action.color === 'warning' &&
+                                  'text-warning cursor-pointer',
+                                action.color === 'success' &&
+                                  'text-success cursor-pointer',
+                                action.color === 'danger' &&
+                                  'text-destructive focus:bg-destructive focus:text-foreground cursor-pointer'
+                              )}
+                              disabled={action.disabled}
+                            >
+                              {action.icon && (
+                                <span className="mr-1 inline-flex">
+                                  {action.icon}
+                                </span>
+                              )}
+                              {action.label}
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   Tidak ada data yang ditemukan.
                 </TableCell>
               </TableRow>
@@ -211,22 +310,21 @@ export function MySimpleDataTable<TData, TValue>({
       {withPagination && (
         <div className="flex items-center justify-end space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
-            Halaman {table.getState().pagination.pageIndex + 1} dari{' '}
-            {table.getPageCount()}
+            Halaman {pageIndex + 1} dari {pageCount}
           </div>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => onPageChange?.(pageIndex - 1)}
+            disabled={pageIndex <= 0}
           >
             Sebelumnya
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => onPageChange?.(pageIndex + 1)}
+            disabled={pageIndex + 1 >= pageCount}
           >
             Berikutnya
           </Button>
