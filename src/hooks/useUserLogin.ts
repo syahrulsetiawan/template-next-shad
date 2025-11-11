@@ -3,24 +3,21 @@
 'use client';
 
 import React from 'react';
-import {UserData, Tenant, UserConfig} from '../types/UserTypes'; // Asumsikan file types.ts ada di direktori yang sama
+import {UserData, UserTenant, UserConfig} from '../types/UserTypes';
 
 // Mendefinisikan tipe untuk return value dari hook ini
 interface UseUserLoginReturn {
   dataUser: UserData | null;
-  tenants: Tenant[];
-  userSettings: UserConfig[] | null;
+  tenants: UserTenant[];
+  userConfigs: UserConfig[];
   setAllData: (data: UserData) => void;
   clearAllData: () => void;
 }
 
 export const useUserLogin = (): UseUserLoginReturn => {
-  // Gunakan tipe yang sudah didefinisikan
   const [dataUser, setDataUser] = React.useState<UserData | null>(null);
-  const [tenants, setTenants] = React.useState<Tenant[]>([]);
-  const [userSettings, setUserSettings] = React.useState<UserConfig[] | null>(
-    null
-  );
+  const [tenants, setTenants] = React.useState<UserTenant[]>([]);
+  const [userConfigs, setUserConfigs] = React.useState<UserConfig[]>([]);
 
   /**
    * Mengatur semua data pengguna (data utama, konfigurasi, dan tenant)
@@ -29,8 +26,8 @@ export const useUserLogin = (): UseUserLoginReturn => {
    */
   const setAllData = (data: UserData) => {
     setDataUser(data);
-    setUserSettings(data.configs);
-    setTenants(data.tenants);
+    setUserConfigs(data.userConfigs || []);
+    setTenants(data.tenants || []);
   };
 
   /**
@@ -38,20 +35,15 @@ export const useUserLogin = (): UseUserLoginReturn => {
    */
   const clearAllData = () => {
     setDataUser(null);
-    setUserSettings(null);
+    setUserConfigs([]);
     setTenants([]);
   };
 
-  // Kita hanya perlu mengembalikan nilai state, karena sudah di-type dengan baik
   return {
     dataUser,
     tenants,
-    userSettings,
+    userConfigs,
     setAllData,
     clearAllData
   };
 };
-
-// Catatan: Saya menghapus fungsi getTenants, getUserSettings, dan getDataUser
-// karena nilai state (tenants, userSettings, dataUser) sudah diekspos
-// dan dapat diakses langsung oleh komponen yang menggunakan hook ini.

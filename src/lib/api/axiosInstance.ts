@@ -1,16 +1,12 @@
 import axios, {
   AxiosInstance,
-  AxiosRequestConfig,
   AxiosError,
-  AxiosHeaders
+  AxiosHeaders,
+  InternalAxiosRequestConfig
 } from 'axios';
-import authService from '@/services/authService'; // sesuaikan path kamu
-
-// Konfigurasi global
-axios.defaults.withCredentials = true;
 
 // Tambahkan tipe tambahan
-interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
+interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
   withAuth?: boolean;
   _retry?: boolean;
 }
@@ -34,49 +30,21 @@ const processQueue = (error: any | null, token: string | null = null) => {
 const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 15000,
-  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json'
   }
 });
 
-// Fungsi ambil cookie browser
-const getCookie = (name: string): string | null => {
-  if (typeof document === 'undefined') return null;
-  const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
-  return match ? decodeURIComponent(match[2]) : null;
-};
-
 // =========================
 // REQUEST INTERCEPTOR
 // =========================
 api.interceptors.request.use(
-  async (config: ExtendedAxiosRequestConfig) => {
-    // 1️⃣ Pastikan CSRF cookie ada
-    // if (!getCookie('XSRF-TOKEN')) {
-    // }
-    try {
-      await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL_XSRF}/sanctum/csrf-cookie`,
-        {
-          withCredentials: true
-        }
-      );
-    } catch (err) {
-      console.error('Gagal set CSRF cookie:', err);
-    }
-
-    // 2️⃣ Set header CSRF token
-    const xsrfToken = getCookie('XSRF-TOKEN');
-    if (xsrfToken) {
-      config.headers = config.headers || {};
-      (config.headers as AxiosHeaders)['X-XSRF-TOKEN'] = xsrfToken;
-    }
-
-    // 3️⃣ Tambahkan Bearer Token kalau withAuth = true
-    if (config.withAuth) {
-      const token = localStorage.getItem('accessToken');
+  (config: ExtendedAxiosRequestConfig) => {
+    // Tambahkan Bearer Token dari localStorage kalau withAuth = true
+    if (config.withAuth !== false) {
+      // Default true kecuali explicitly false
+      const token = localStorage.getItem('X-LANYA-AT');
       if (token) {
         config.headers = config.headers || {};
         (config.headers as AxiosHeaders).Authorization = `Bearer ${token}`;
@@ -100,7 +68,7 @@ api.interceptors.response.use(
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      originalRequest.withAuth
+      originalRequest.withAuth !== false
     ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -119,18 +87,38 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const newToken = await authService.refreshToken();
-        localStorage.setItem('accessToken', newToken);
+        const refreshToken = localStorage.getItem('X-LANYA-RT');
+        if (!refreshToken) {
+          throw new Error('No refresh token available');
+        }
 
-        processQueue(null, newToken);
+        // Hit endpoint /refresh dengan refreshToken
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+          {refreshToken}
+        );
+
+        const {accessToken, refreshToken: newRefreshToken} = response.data.data;
+
+        // Simpan token baru
+        localStorage.setItem('X-LANYA-AT', accessToken);
+        localStorage.setItem('X-LANYA-RT', newRefreshToken);
+
+        processQueue(null, accessToken);
 
         originalRequest.headers = originalRequest.headers || {};
         (originalRequest.headers as AxiosHeaders).Authorization =
-          `Bearer ${newToken}`;
+          `Bearer ${accessToken}`;
         return api(originalRequest);
       } catch (err) {
         processQueue(err);
-        authService.logout();
+        // Logout: hapus token dan redirect ke login
+        localStorage.removeItem('X-LANYA-AT');
+        localStorage.removeItem('X-LANYA-RT');
+        localStorage.removeItem('user');
+        if (typeof window !== 'undefined') {
+          window.location.href = '/login';
+        }
         return Promise.reject(err);
       } finally {
         isRefreshing = false;

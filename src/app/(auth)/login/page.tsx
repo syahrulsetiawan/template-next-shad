@@ -27,7 +27,7 @@ import Link from 'next/link';
 
 // --- Import hook yang baru dibuat ---
 import {useUserLogin} from '@/hooks/useUserLogin'; // Asumsikan path hook Anda
-import { useTheme } from 'next-themes';
+import {useTheme} from 'next-themes';
 import LogoLight from '@/components/image/LogoLight';
 import LogoDark from '@/components/image/LogoDark';
 
@@ -72,38 +72,29 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // 1. Panggil fungsi login
-      const response = await authService.login(data);
+      // 1. Panggil fungsi login (sudah otomatis simpan token dan return user data)
+      const userData = await authService.login(data);
 
-      // 2. Ambil Profil Pengguna
-      const getProfile = await authService.myProfile();
-
-      // --- INTEGRASI HOOK BARU ---
-      // 3. Simpan data profil ke state global/context melalui hook
-      setAllData(getProfile);
+      // 2. Simpan data user ke state melalui hook
+      setAllData(userData);
 
       toast.success('Login Success', {
-        description: `Welcome Back, ${getProfile.name}`, // Personalisasi pesan selamat datang
+        description: `Welcome Back, ${userData.name}`,
         position: 'top-center'
       });
 
-      // 4. Redirect ke halaman dashboard
-      // Gunakan redirect dari next/navigation untuk klien-side redirect yang lebih baik
-      // Ini akan throw error yang ditangani oleh Next.js untuk navigasi
-      const last_service = dataUser?.last_service_key || 'admin-portal';
-
-      redirect(`/${last_service}`);
+      // 3. Redirect ke halaman dashboard berdasarkan lastServiceKey
+      const lastService = userData.lastServiceKey || 'app';
+      redirect(`/${lastService}`);
     } catch (err: any) {
       console.error('Login failed:', err);
 
-      // Penanganan error tetap sama (sudah baik)
+      // Penanganan error
       const errorReason = err.reason || 'something_went_wrong';
       toast.error(e(errorReason + '.title'), {
         description: e(errorReason + '.description'),
         position: 'top-center'
       });
-      // Jika terjadi error, hapus token yang mungkin tersimpan
-      localStorage.removeItem('accessToken');
     } finally {
       setIsLoading(false);
     }
@@ -119,9 +110,15 @@ export default function LoginPage() {
             <LocaleSwitcher />
           </div>
           <div className="flex flex-col items-center pb-12">
-            {theme === 'dark' || theme === 'system' ? <LogoLight /> : <LogoDark />}
-            <h5 className="text-lg text-foreground">{t('login')}</h5>
-            <p className="text-muted-foreground mb-8">{t('description')}</p>
+            {theme === 'dark' || theme === 'system' ? (
+              <LogoLight />
+            ) : (
+              <LogoDark />
+            )}
+            {/* <h5 className="text-lg text-foreground">{t('login')}</h5> */}
+            <p className="text-muted-foreground mt-4 mb-8">
+              {t('description')}
+            </p>
 
             <div className="form">
               <Form {...form}>
