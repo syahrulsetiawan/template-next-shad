@@ -1,21 +1,23 @@
 'use client';
 
-import { ImageCarousel } from '@/components/image/ImageCarousel';
-import { ImageGallery } from '@/components/image/ImageGallery';
-import { SingleImageViewer } from '@/components/image/SingleImageViewer';
+import {ImageCarousel} from '@/components/image/ImageCarousel';
+import {ImageGallery} from '@/components/image/ImageGallery';
+import {SingleImageViewer} from '@/components/image/SingleImageViewer';
 import MyFullLoadingPage from '@/components/layout/MyFullLoadingPage';
 import {AsyncSelect} from '@/components/custom/AsyncSelect';
 import {Button} from '@/components/ui/button';
 import {useLoading} from '@/hooks/useLoading';
 import {useEffect} from 'react';
 import {toast} from 'sonner';
+import {Calendar} from '@/components/ui/calendar';
+import {Datepicker, Timepicker} from '@/components/custom/Datepicker';
 
 const images = [
-    { src: "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d" },
-    { src: "https://images.unsplash.com/photo-1518770660439-4636190af475" },
-    { src: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e" },
-    { src: "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d" },
-  ];
+  {src: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'},
+  {src: 'https://images.unsplash.com/photo-1518770660439-4636190af475'},
+  {src: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e'},
+  {src: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'}
+];
 
 export default function Page() {
   const {isLoading, startLoading, stopLoading} = useLoading();
@@ -55,6 +57,14 @@ export default function Page() {
               params={{projectid: 2}}
               onChange={(v) => console.log(v)}
             />
+            <Datepicker
+              label="Date"
+              onChange={(date) => console.log('DATEPICKER DATE', date)}
+            />
+            <Timepicker
+              label="Time"
+              onChange={(e) => console.log('TIMEPICKER', e)}
+            />
           </div>
         </div>
         <div className="bg-muted/50 rounded-xl p-4">
@@ -63,7 +73,8 @@ export default function Page() {
             alt="Sample"
             width={100}
             height={100}
-          /><br />
+          />
+          <br />
           <div>
             <ImageGallery
               images={images}
@@ -77,7 +88,14 @@ export default function Page() {
             {/* <ImageCarousel images={images} width={300} height={200} rounded /> */}
           </div>
         </div>
-        <div className="bg-muted/50 rounded-xl" />
+        <div className="bg-muted/50 rounded-xl p-2">
+          <Calendar
+            mode="single"
+            className="w-full"
+            captionLayout="dropdown"
+            onDayClick={(date) => console.log('CALENDAR DATE', date)}
+          />
+        </div>
         <div className="bg-muted/50 rounded-xl" />
       </div>
       <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
