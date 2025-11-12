@@ -28,7 +28,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/(auth)/login/page.tsx.bak"
-, "src/components/Notification.tsx.bak"  ],
+    "src/app/(auth)/login/page.tsx.bak", 
+    "src/components/Notification.tsx.bak",
+    "src/types"  
+  ],
   "exclude": ["node_modules"]
 }

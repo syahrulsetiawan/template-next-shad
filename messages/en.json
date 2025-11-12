@@ -26,7 +26,8 @@
   "breadcrumb": {
     "home": "Home",
     "admin-portal": "Admin Portal",
-    "company-settings": "Company Settings"
+    "company-settings": "Company Settings",
+    "operational-zone-settings": "Operational Zone Settings"
   },
   "AppLayout": {
     "home": "Home",
@@ -74,7 +75,7 @@
   "ForgotPasswordPage": {
     "title": "Forgot Your Password?",
     "description": "Enter your email to reset your password. We will send a reset link to your email.",
-    "form":{
+    "form": {
       "email": {
         "label": "Email",
         "placeholder": "Enter your email address"
@@ -88,7 +89,7 @@
   "ResetPasswordPage": {
     "title": "Reset Your Password",
     "description": "Enter your new password.",
-    "form":{
+    "form": {
       "password": {
         "label": "New Password",
         "placeholder": "Enter your new password"
@@ -172,9 +173,13 @@
         "save": "Save Changes",
         "loading": "Saving..."
       }
+    },
+    "OperationalZonePage": {
+      "title": "Master Operational Zone",
+      "description": "Manage all key business locations here. This data ensures accurate reporting and delivery."
     }
   },
-  
+
   "common": {
     "loading": "Loading...",
     "error": "An error occurred. Please try again later.",
@@ -481,6 +486,14 @@
     "something_went_wrong": {
       "title": "Something Went Wrong",
       "description": "An unexpected error occurred. Please try again later."
+    },
+    "temporary_locked_5min": {
+      "title": "Temporary Locked",
+      "description": "Your account has been temporarily locked due to multiple failed login attempts. Please try again in 5 minutes."
+    },
+    "temporary_locked": {
+      "title": "Temporary Locked",
+      "description": "Your account has been temporarily locked due to multiple failed login attempts. Please try again later."
     }
   }
 }

@@ -1,5 +1,5 @@
 'use client';
-import {redirect} from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import {useLocale, useTranslations} from 'next-intl';
 import {z} from 'zod';
 import {toast} from 'sonner';
@@ -26,8 +26,8 @@ import {Label} from '@/components/ui/label';
 import Link from 'next/link';
 
 // --- Import hook yang baru dibuat ---
-import {useUserLogin} from '@/hooks/useUserLogin'; // Asumsikan path hook Anda
-import { useTheme } from 'next-themes';
+import {useUser} from '@/contexts/UserContext';
+import {useTheme} from 'next-themes';
 import LogoLight from '@/components/image/LogoLight';
 import LogoDark from '@/components/image/LogoDark';
 
@@ -37,16 +37,17 @@ export default function LoginPage() {
   const v = useTranslations('common.validation');
   const {theme} = useTheme();
   const locale = useLocale();
+  const router = useRouter();
 
   // --- Gunakan hook yang baru ---
-  const {setAllData, dataUser} = useUserLogin(); // Ambil fungsi untuk menyimpan data user
+  const {setAllData, dataUser} = useUser();
 
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
   const loginFormSchema = z.object({
-    credentials: z
-      .string({required_error: v('required', {field: 'credentials'})})
+    usernameOrEmail: z
+      .string({required_error: v('required', {field: 'usernameOrEmail'})})
       .min(6, {message: v('minLength', {min: '6'})})
       .max(50, {message: v('maxLength', {max: '50'})}),
     password: z
@@ -72,38 +73,41 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // 1. Panggil fungsi login
-      const response = await authService.login(data);
+      // 1. Panggil fungsi login (sudah otomatis simpan token dan return user data)
+      const userData = await authService.login(data);
 
-      // 2. Ambil Profil Pengguna
-      const getProfile = await authService.myProfile();
+      // 2. Simpan data user ke state melalui hook
+      setAllData(userData);
 
-      // --- INTEGRASI HOOK BARU ---
-      // 3. Simpan data profil ke state global/context melalui hook
-      setAllData(getProfile);
+      // 3. Verify cookies are set (debugging)
+      console.log('Cookies after login:', {
+        AT: document.cookie.includes('X-LANYA-AT'),
+        RT: document.cookie.includes('X-LANYA-RT'),
+        USER: document.cookie.includes('X-LANYA-USER')
+      });
 
       toast.success('Login Success', {
-        description: `Welcome Back, ${getProfile.name}`, // Personalisasi pesan selamat datang
+        description: `Welcome Back, ${userData.name}`,
         position: 'top-center'
       });
 
-      // 4. Redirect ke halaman dashboard
-      // Gunakan redirect dari next/navigation untuk klien-side redirect yang lebih baik
-      // Ini akan throw error yang ditangani oleh Next.js untuk navigasi
-      const last_service = dataUser?.last_service_key || 'admin-portal';
+      // 4. Redirect ke halaman dashboard berdasarkan lastServiceKey
+      const lastService = userData.lastServiceKey || 'admin-portal';
 
-      redirect(`/${last_service}`);
+      // Small delay to ensure cookies are set before redirect
+      setTimeout(() => {
+        router.replace(`/${lastService}`);
+      }, 100);
     } catch (err: any) {
+      console.log(err);
       console.error('Login failed:', err);
 
-      // Penanganan error tetap sama (sudah baik)
+      // Penanganan error
       const errorReason = err.reason || 'something_went_wrong';
       toast.error(e(errorReason + '.title'), {
         description: e(errorReason + '.description'),
         position: 'top-center'
       });
-      // Jika terjadi error, hapus token yang mungkin tersimpan
-      localStorage.removeItem('accessToken');
     } finally {
       setIsLoading(false);
     }
@@ -119,9 +123,15 @@ export default function LoginPage() {
             <LocaleSwitcher />
           </div>
           <div className="flex flex-col items-center pb-12">
-            {theme === 'dark' || theme === 'system' ? <LogoLight /> : <LogoDark />}
-            <h5 className="text-lg text-foreground">{t('login')}</h5>
-            <p className="text-muted-foreground mb-8">{t('description')}</p>
+            {theme === 'dark' || theme === 'system' ? (
+              <LogoLight />
+            ) : (
+              <LogoDark />
+            )}
+            {/* <h5 className="text-lg text-foreground">{t('login')}</h5> */}
+            <p className="text-muted-foreground mt-4 mb-8">
+              {t('description')}
+            </p>
 
             <div className="form">
               <Form {...form}>
@@ -132,10 +142,10 @@ export default function LoginPage() {
                   <div className="mb-2">
                     <FormField
                       control={form.control}
-                      name="credentials"
+                      name="usernameOrEmail"
                       render={({field}) => (
                         <FormItem>
-                          <FormLabel>credential</FormLabel>
+                          <FormLabel>Username or Email</FormLabel>
                           <FormControl>
                             <Input
                               required
