@@ -35,7 +35,7 @@ const CustomInput: React.FC<
       className={
         layout === 'horizontal'
           ? 'flex items-center gap-4 mb-2'
-          : 'flex flex-col mb-2'
+          : 'flex flex-col mb-2 w-full'
       }
     >
       {label && (
