@@ -36,6 +36,8 @@ import {
 } from '@/components/ui/sidebar';
 import {NavbarComponent} from './NavbarComponent';
 import {useUser} from '@/contexts/UserContext';
+import {decrypt} from '@/helpers/encryption_helper';
+import {UserData} from '@/types/UserTypes';
 
 // This is sample data.
 const data = {
@@ -197,10 +199,11 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
 
     if (userCookie) {
       try {
-        const parsed = JSON.parse(userCookie);
-        console.log('[AppSidebar] Parsed cookie data:', parsed);
+        // Decrypt cookie data karena sekarang sudah encrypted
+        const parsed = decrypt<UserData>(userCookie);
+        console.log('[AppSidebar] Decrypted cookie data:', parsed);
       } catch (e) {
-        console.error('[AppSidebar] Failed to parse cookie:', e);
+        console.error('[AppSidebar] Failed to decrypt cookie:', e);
       }
     }
   }, [dataUser]);
