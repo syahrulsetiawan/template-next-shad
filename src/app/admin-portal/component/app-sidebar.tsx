@@ -14,7 +14,11 @@ import {
   SquareTerminal
 } from 'lucide-react';
 
-import {AdminPortalPlatform, AdminPortalUserThings, AdminPortalUserData} from '@/data/Menu';
+import {
+  AdminPortalPlatform,
+  AdminPortalUserThings,
+  AdminPortalUserData
+} from '@/data/Menu';
 
 import {NavMain} from '@/components/nav-main';
 import {NavProjects} from '@/components/nav-projects';
@@ -30,7 +34,8 @@ import {
   SidebarMenuItem,
   SidebarRail
 } from '@/components/ui/sidebar';
-import { NavbarComponent } from './NavbarComponent';
+import {NavbarComponent} from './NavbarComponent';
+import {useUser} from '@/contexts/UserContext';
 
 // This is sample data.
 const data = {
@@ -168,6 +173,39 @@ const data = {
 };
 
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
+  const {dataUser} = useUser();
+  const userLoggedIn = {
+    name: dataUser?.name || 'Guest User',
+    email: dataUser?.email || 'guest@example.com',
+    avatar: null
+  };
+  // Debugging
+  React.useEffect(() => {
+    console.log('[AppSidebar] dataUser:', dataUser);
+
+    // Check cookie
+    const getCookie = (name: string) => {
+      if (typeof document === 'undefined') return null;
+      const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
+      return match ? decodeURIComponent(match[2]) : null;
+    };
+
+    const userCookie = getCookie('X-LANYA-USER');
+    console.log(
+      '[AppSidebar] X-LANYA-USER cookie:',
+      userCookie ? 'EXISTS' : 'NOT FOUND'
+    );
+
+    if (userCookie) {
+      try {
+        const parsed = JSON.parse(userCookie);
+        console.log('[AppSidebar] Parsed cookie data:', parsed);
+      } catch (e) {
+        console.error('[AppSidebar] Failed to parse cookie:', e);
+      }
+    }
+  }, [dataUser]);
+
   return (
     <Sidebar collapsible="icon" {...props} variant="sidebar">
       <SidebarHeader>
@@ -179,7 +217,7 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
         <NavbarComponent groupLabel="Data" items={AdminPortalUserData} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userLoggedIn} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

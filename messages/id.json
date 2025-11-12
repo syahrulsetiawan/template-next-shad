@@ -75,7 +75,7 @@
   "ForgotPasswordPage": {
     "title": "Lupa Kata Sandi?",
     "description": "Masukkan email Anda untuk mengatur ulang kata sandi. Kami akan mengirimkan tautan pengaturan ulang ke email Anda.",
-    "form":{
+    "form": {
       "email": {
         "label": "Email",
         "placeholder": "Masukkan email Anda"
@@ -89,7 +89,7 @@
   "ResetPasswordPage": {
     "title": "Reset Kata Sandi Anda",
     "description": "Masukkan kata sandi baru Anda.",
-    "form":{
+    "form": {
       "password": {
         "label": "Kata Sandi Baru",
         "placeholder": "Masukkan kata sandi baru Anda"
@@ -169,7 +169,7 @@
           "placeholder": "Pilih format mata uang"
         }
       },
-      "button":{
+      "button": {
         "save": "Simpan Perubahan",
         "loading": "Menyimpan..."
       }
@@ -179,7 +179,6 @@
       "description": "Tempat Anda memetakan seluruh lokasi penting bisnis. Data ini memastikan ketepatan laporan dan pengiriman barang."
     }
   },
-  
 
   "common": {
     "loading": "Memuat...",
@@ -480,6 +479,14 @@
     "something_went_wrong": {
       "title": "Terjadi Kesalahan",
       "description": "Terjadi kesalahan tak terduga. Silakan coba lagi nanti."
+    },
+    "temporary_locked_5min": {
+      "title": "Akun Terkunci Sementara",
+      "description": "Akun Anda telah terkunci sementara karena beberapa upaya login yang gagal. Silakan coba lagi dalam 5 menit."
+    },
+    "temporary_locked": {
+      "title": "Akun Terkunci Sementara",
+      "description": "Akun Anda telah terkunci sementara karena beberapa upaya login yang gagal. Silakan coba lagi nanti."
     }
   }
 }

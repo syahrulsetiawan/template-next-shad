@@ -2,8 +2,8 @@
 
 import {useEffect, useState} from 'react';
 import {useRouter, usePathname} from 'next/navigation';
-import authService from '@/services/authService';
-import {useUserLogin} from '@/hooks/useUserLogin';
+import {useUser} from '@/contexts/UserContext';
+import {useSyncUserFromCookie} from '@/hooks/useSyncUserFromCookie';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -21,9 +21,12 @@ const PUBLIC_PATHS = [
 export default function AuthGuard({children}: AuthGuardProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const {setAllData, dataUser} = useUserLogin();
+  const {dataUser} = useUser();
   const [isChecking, setIsChecking] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Sync user data dari cookie yang di-set middleware
+  useSyncUserFromCookie();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -35,28 +38,31 @@ export default function AuthGuard({children}: AuthGuardProps) {
       }
 
       try {
-        // 1. Ambil refresh token dari localStorage
-        const refreshToken = localStorage.getItem('X-LANYA-RT');
+        // 1. Cek apakah ada refresh token di localStorage atau cookie
+        const refreshTokenLS = localStorage.getItem('X-LANYA-RT');
+        const getCookie = (name: string): string | null => {
+          if (typeof document === 'undefined') return null;
+          const match = document.cookie.match(
+            new RegExp(`(^| )${name}=([^;]+)`)
+          );
+          return match ? decodeURIComponent(match[2]) : null;
+        };
+        const refreshTokenCookie = getCookie('X-LANYA-RT');
 
-        if (!refreshToken) {
+        if (!refreshTokenLS && !refreshTokenCookie) {
           throw new Error('No refresh token');
         }
 
-        // 2. Hit refresh endpoint untuk mendapatkan access token baru
-        const newAccessToken = await authService.refreshToken();
-
-        // 3. Test access token dengan hit /me
-        const userData = await authService.myProfile();
-
-        // 4. Token valid, simpan data user
-        setAllData(userData);
-        setIsAuthenticated(true);
-
-        // 5. Jika user di root path atau path tidak sesuai, redirect ke lastServiceKey
-        if (pathname === '/' || pathname === '') {
-          const lastService = userData.lastServiceKey || 'admin-portal';
-          router.replace(`/${lastService}`);
+        // 2. Jika middleware sudah validasi (ada cookie user), langsung set authenticated
+        const userCookie = getCookie('X-LANYA-USER');
+        if (userCookie) {
+          setIsAuthenticated(true);
+          setIsChecking(false);
+          return;
         }
+
+        // 3. Jika tidak ada user cookie, redirect ke login (middleware akan handle)
+        throw new Error('No user data');
       } catch (error) {
         console.error('Auth check failed:', error);
 
@@ -75,7 +81,7 @@ export default function AuthGuard({children}: AuthGuardProps) {
     };
 
     checkAuth();
-  }, [pathname, router, setAllData]);
+  }, [pathname, router]);
 
   // Tampilkan loading saat checking auth
   if (isChecking) {

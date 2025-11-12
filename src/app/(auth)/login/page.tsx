@@ -1,5 +1,5 @@
 'use client';
-import {redirect} from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import {useLocale, useTranslations} from 'next-intl';
 import {z} from 'zod';
 import {toast} from 'sonner';
@@ -26,7 +26,7 @@ import {Label} from '@/components/ui/label';
 import Link from 'next/link';
 
 // --- Import hook yang baru dibuat ---
-import {useUserLogin} from '@/hooks/useUserLogin'; // Asumsikan path hook Anda
+import {useUser} from '@/contexts/UserContext';
 import {useTheme} from 'next-themes';
 import LogoLight from '@/components/image/LogoLight';
 import LogoDark from '@/components/image/LogoDark';
@@ -37,16 +37,17 @@ export default function LoginPage() {
   const v = useTranslations('common.validation');
   const {theme} = useTheme();
   const locale = useLocale();
+  const router = useRouter();
 
   // --- Gunakan hook yang baru ---
-  const {setAllData, dataUser} = useUserLogin(); // Ambil fungsi untuk menyimpan data user
+  const {setAllData, dataUser} = useUser();
 
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
   const loginFormSchema = z.object({
-    credentials: z
-      .string({required_error: v('required', {field: 'credentials'})})
+    usernameOrEmail: z
+      .string({required_error: v('required', {field: 'usernameOrEmail'})})
       .min(6, {message: v('minLength', {min: '6'})})
       .max(50, {message: v('maxLength', {max: '50'})}),
     password: z
@@ -78,15 +79,27 @@ export default function LoginPage() {
       // 2. Simpan data user ke state melalui hook
       setAllData(userData);
 
+      // 3. Verify cookies are set (debugging)
+      console.log('Cookies after login:', {
+        AT: document.cookie.includes('X-LANYA-AT'),
+        RT: document.cookie.includes('X-LANYA-RT'),
+        USER: document.cookie.includes('X-LANYA-USER')
+      });
+
       toast.success('Login Success', {
         description: `Welcome Back, ${userData.name}`,
         position: 'top-center'
       });
 
-      // 3. Redirect ke halaman dashboard berdasarkan lastServiceKey
-      const lastService = userData.lastServiceKey || 'app';
-      redirect(`/${lastService}`);
+      // 4. Redirect ke halaman dashboard berdasarkan lastServiceKey
+      const lastService = userData.lastServiceKey || 'admin-portal';
+
+      // Small delay to ensure cookies are set before redirect
+      setTimeout(() => {
+        router.replace(`/${lastService}`);
+      }, 100);
     } catch (err: any) {
+      console.log(err);
       console.error('Login failed:', err);
 
       // Penanganan error
@@ -129,10 +142,10 @@ export default function LoginPage() {
                   <div className="mb-2">
                     <FormField
                       control={form.control}
-                      name="credentials"
+                      name="usernameOrEmail"
                       render={({field}) => (
                         <FormItem>
-                          <FormLabel>credential</FormLabel>
+                          <FormLabel>Username or Email</FormLabel>
                           <FormControl>
                             <Input
                               required

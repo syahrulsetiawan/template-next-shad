@@ -6,6 +6,7 @@ import {ReactNode} from 'react';
 import './globals.css';
 import {ThemeProvider} from '@/components/layout/ThemeProvider';
 import {Toaster} from 'sonner';
+import {UserProvider} from '@/contexts/UserContext';
 
 const inter = Inter({subsets: ['latin']});
 
@@ -30,7 +31,7 @@ export default async function LocaleLayout({children}: Props) {
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <UserProvider>{children}</UserProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
