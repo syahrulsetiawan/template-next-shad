@@ -176,8 +176,7 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
   const {dataUser} = useUser();
   const userLoggedIn = {
     name: dataUser?.name || 'Guest User',
-    email: dataUser?.email || 'guest@example.com',
-    avatar: null
+    email: dataUser?.email || 'guest@example.com'
   };
   // Debugging
   React.useEffect(() => {

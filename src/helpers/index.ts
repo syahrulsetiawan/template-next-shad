@@ -11,3 +11,6 @@ export * from './string_helper';
 
 // Export all format helpers
 export * from './format_helper';
+
+// Export all encryption helpers
+export * from './encryption_helper';

@@ -2,6 +2,8 @@
 
 import {useEffect, useState} from 'react';
 import {useUser} from '@/contexts/UserContext';
+import {decrypt, encrypt} from '@/helpers/encryption_helper';
+import {UserData} from '@/types/UserTypes';
 
 /**
  * Hook untuk sync user data dari cookie ke state
@@ -20,17 +22,25 @@ export function useSyncUserFromCookie() {
     };
 
     const syncUserData = () => {
-      const userDataCookie = getCookie('X-LANYA-USER');
+      const encryptedUserCookie = getCookie('X-LANYA-USER');
 
       console.log('[useSyncUserFromCookie] Checking cookie...', {
-        hasCookie: !!userDataCookie,
+        hasCookie: !!encryptedUserCookie,
         hasDataUser: !!dataUser,
         hasChecked
       });
 
-      if (userDataCookie) {
+      if (encryptedUserCookie) {
         try {
-          const userData = JSON.parse(userDataCookie);
+          // Decrypt user data dari cookie
+          const userData = decrypt<UserData>(encryptedUserCookie);
+
+          if (!userData) {
+            console.error(
+              '[useSyncUserFromCookie] Failed to decrypt user data'
+            );
+            return;
+          }
 
           // Hanya set jika data berbeda atau belum ada
           if (
@@ -43,14 +53,14 @@ export function useSyncUserFromCookie() {
             );
             setAllData(userData);
 
-            // Sync ke localStorage juga
-            localStorage.setItem('user', JSON.stringify(userData));
+            // Sync ke localStorage juga (encrypted)
+            localStorage.setItem('user', encrypt(userData));
           }
 
           setHasChecked(true);
         } catch (error) {
           console.error(
-            '[useSyncUserFromCookie] Failed to parse user data from cookie:',
+            '[useSyncUserFromCookie] Failed to decrypt user data from cookie:',
             error
           );
         }

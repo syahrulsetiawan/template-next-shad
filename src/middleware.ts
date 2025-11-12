@@ -1,5 +1,34 @@
 import {NextResponse} from 'next/server';
 import type {NextRequest} from 'next/server';
+import CryptoJS from 'crypto-js';
+
+// Helper untuk encrypt/decrypt di middleware
+function encryptData(data: any): string {
+  const key =
+    process.env.NEXT_PUBLIC_ENCRYPTION_KEY ||
+    'default-encryption-key-please-change-this';
+  const jsonString = JSON.stringify(data);
+  return CryptoJS.AES.encrypt(jsonString, key).toString();
+}
+
+function decryptData<T = any>(encryptedData: string): T | null {
+  try {
+    const key =
+      process.env.NEXT_PUBLIC_ENCRYPTION_KEY ||
+      'default-encryption-key-please-change-this';
+    const decrypted = CryptoJS.AES.decrypt(encryptedData, key);
+    const jsonString = decrypted.toString(CryptoJS.enc.Utf8);
+
+    if (!jsonString) {
+      return null;
+    }
+
+    return JSON.parse(jsonString) as T;
+  } catch (error) {
+    console.error('Middleware decryption error:', error);
+    return null;
+  }
+}
 
 // URL yang tidak perlu autentikasi
 const PUBLIC_PATHS = [
@@ -69,22 +98,25 @@ export async function middleware(request: NextRequest) {
   try {
     // Cek apakah ada access token yang masih valid
     const accessToken = request.cookies.get('X-LANYA-AT')?.value;
-    const userDataCookie = request.cookies.get('X-LANYA-USER')?.value;
+    const encryptedUserCookie = request.cookies.get('X-LANYA-USER')?.value;
 
     // Jika sudah ada access token dan user data, skip refresh (baru login)
-    if (accessToken && userDataCookie) {
+    if (accessToken && encryptedUserCookie) {
       const response = NextResponse.next();
 
       // Jika user mengakses root path, redirect ke lastServiceKey
       if (pathname === '/') {
         try {
-          const userData = JSON.parse(userDataCookie);
-          const lastService = userData.lastServiceKey || 'admin-portal';
-          const url = request.nextUrl.clone();
-          url.pathname = `/${lastService}`;
-          return NextResponse.redirect(url);
+          // Decrypt user data untuk ambil lastServiceKey
+          const userData = decryptData(encryptedUserCookie);
+          if (userData) {
+            const lastService = userData.lastServiceKey || 'admin-portal';
+            const url = request.nextUrl.clone();
+            url.pathname = `/${lastService}`;
+            return NextResponse.redirect(url);
+          }
         } catch (e) {
-          // Jika gagal parse, lanjutkan refresh
+          // Jika gagal decrypt, lanjutkan refresh
         }
       } else {
         // Halaman lain, langsung lanjutkan
@@ -151,8 +183,9 @@ export async function middleware(request: NextRequest) {
       maxAge: 60 * 60 * 24 * 7 // 7 hari
     });
 
-    // Simpan user data ke cookie untuk sync di client-side
-    response.cookies.set('X-LANYA-USER', JSON.stringify(userData), {
+    // Encrypt dan simpan user data ke cookie untuk sync di client-side
+    const encryptedUserData = encryptData(userData);
+    response.cookies.set('X-LANYA-USER', encryptedUserData, {
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

@@ -7,14 +7,15 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Box, CircleX, Layers, Search, SearchIcon, Truck } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from '@/components/ui/separator';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import {Input} from '@/components/ui/input';
+import {Button} from '@/components/ui/button';
+import {Box, CircleX, Layers, Search, SearchIcon, Truck} from 'lucide-react';
+import {Skeleton} from '@/components/ui/skeleton';
+import {Separator} from '@/components/ui/separator';
+import {Tooltip, TooltipContent, TooltipTrigger} from '@/components/ui/tooltip';
+import {InputGroup, InputGroupAddon, InputGroupInput} from '../ui/input-group';
 
 export interface ISearchPanelProps {}
 
@@ -31,7 +32,7 @@ export default function SearchPanel(props: ISearchPanelProps) {
     'warehouse',
     'inventory',
     'shipping',
-    'transportation',
+    'transportation'
   ]);
 
   const [historySearch, setHistorySearch] = React.useState<
@@ -48,22 +49,22 @@ export default function SearchPanel(props: ISearchPanelProps) {
       date: '2023-10-01 12:04:23',
       description: 'Search for Purchase Order 25.000124',
       module: 'Logistics',
-      icon: Box,
+      icon: Box
     },
     {
       keyword: 'DO.25.000323',
       date: '2023-09-30 12:04:23',
       description: 'Search for Delivery Order 25.000323',
       module: 'Shipping',
-      icon: Truck,
+      icon: Truck
     },
     {
       keyword: 'INV.BATCH.PNCL.25.00392',
       date: '2023-10-01 12:04:23',
       description: 'Search for supply chain related terms',
       module: 'Supply Chain',
-      icon: Layers,
-    },
+      icon: Layers
+    }
   ]);
 
   const handleSearch = React.useCallback(() => {
@@ -92,24 +93,28 @@ export default function SearchPanel(props: ISearchPanelProps) {
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Input className='hidden md:block' placeholder="Search Something" type="text" readOnly />
+          <Input
+            className="hidden md:block"
+            placeholder="Search Something"
+            type="text"
+            readOnly
+          />
         </DialogTrigger>
 
         <DialogContent className="sm:max-w-[425px] md:max-w-[680px] min-h-[425px]">
           <DialogHeader>
             <DialogTitle>Search Something</DialogTitle>
+            <Separator className="my-8" />
             <DialogDescription>
-              <div className="relative mt-2">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                  <Search size={16} />
-                </span>
-                <Input
-                  placeholder="Search Something"
-                  type="text"
-                  className="pl-9"
+              <InputGroup>
+                <InputGroupInput
+                  placeholder="Search..."
                   onChange={(e) => setPendingKeyword(e.target.value)}
                 />
-              </div>
+                <InputGroupAddon>
+                  <SearchIcon />
+                </InputGroupAddon>
+              </InputGroup>
             </DialogDescription>
           </DialogHeader>
 
@@ -117,7 +122,10 @@ export default function SearchPanel(props: ISearchPanelProps) {
           <div className="dialog-content block max-h-[360px] overflow-y-auto">
             {/* Loading state */}
             {isLoading &&
-            ((pendingKeyword && pendingKeyword.trim() !== '' && pendingKeyword !== null && pendingKeyword !== undefined) ||
+            ((pendingKeyword &&
+              pendingKeyword.trim() !== '' &&
+              pendingKeyword !== null &&
+              pendingKeyword !== undefined) ||
               (keyword && keyword.trim() !== '')) ? (
               <div className="flex flex-col gap-4 mt-4">
                 <Skeleton className="h-6 w-32 rounded-full" />
@@ -131,11 +139,15 @@ export default function SearchPanel(props: ISearchPanelProps) {
                 <Skeleton className="h-12 w-full rounded-md" />
                 <Skeleton className="h-12 w-full rounded-md" />
               </div>
-            ) : keyword.trim() === '' ? (
+            ) : keyword.trim() === '' ||
+              keyword === null ||
+              keyword === undefined ? (
               // 🏷️ Default content (suggestions + history)
               <div>
                 {/* Suggestions */}
-                <span className="text-xs text-muted-foreground">Searching for</span>
+                <span className="text-xs text-muted-foreground">
+                  Searching for
+                </span>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {tooltip.map((item, index) => (
                     <span
@@ -146,7 +158,9 @@ export default function SearchPanel(props: ISearchPanelProps) {
                       <CircleX
                         className="ml-1 w-4 h-4 cursor-pointer text-muted-foreground hover:text-destructive"
                         onClick={() =>
-                          setTooltip((prev) => prev.filter((_, i) => i !== index))
+                          setTooltip((prev) =>
+                            prev.filter((_, i) => i !== index)
+                          )
                         }
                       />
                     </span>
@@ -156,7 +170,9 @@ export default function SearchPanel(props: ISearchPanelProps) {
                 <Separator className="my-4" />
 
                 {/* History */}
-                <span className="text-xs text-muted-foreground">Last Search</span>
+                <span className="text-xs text-muted-foreground">
+                  Last Search
+                </span>
                 <div className="mt-2">
                   {historySearch.map((item, index) => (
                     <div
@@ -172,15 +188,21 @@ export default function SearchPanel(props: ISearchPanelProps) {
                         </Tooltip>
 
                         <div>
-                          <div className="text-sm font-medium">{item.keyword}</div>
-                          <span className="text-xs text-muted-foreground">{item.date}</span>
+                          <div className="text-sm font-medium">
+                            {item.keyword}
+                          </div>
+                          <span className="text-xs text-muted-foreground">
+                            {item.date}
+                          </span>
                         </div>
                       </div>
 
                       <CircleX
                         className="w-4 h-4 text-muted-foreground hover:text-destructive cursor-pointer"
                         onClick={() =>
-                          setHistorySearch((prev) => prev.filter((_, i) => i !== index))
+                          setHistorySearch((prev) =>
+                            prev.filter((_, i) => i !== index)
+                          )
                         }
                       />
                     </div>
@@ -191,7 +213,9 @@ export default function SearchPanel(props: ISearchPanelProps) {
               // 🔎 Search result placeholder
               <div className="flex flex-col items-center justify-center h-full py-12">
                 <Search className="w-10 h-10 mb-4 text-muted-foreground" />
-                <div className="text-lg font-semibold">Hasil untuk “{keyword}”</div>
+                <div className="text-lg font-semibold">
+                  Hasil untuk “{keyword}”
+                </div>
                 <div className="mt-2 text-sm text-muted-foreground">
                   Tampilkan hasil pencarian di sini...
                 </div>

@@ -5,6 +5,7 @@ import {ILoginCredentials, IAuthRegisterCredentials} from '../types/types';
 import {UserData, LoginResponse, MeResponse} from '../types/UserTypes';
 import {AxiosResponse} from 'axios';
 import {handleAxiosError} from './handleAxiosError';
+import {encrypt, decrypt} from '@/helpers/encryption_helper';
 
 // Helper function untuk set cookie (selaras dengan middleware)
 const setCookie = (name: string, value: string, days: number) => {
@@ -85,15 +86,20 @@ const login = async (credentials: ILoginCredentials): Promise<UserData> => {
 
     const {accessToken, refreshToken, user} = response.data.data;
 
-    // Simpan token ke localStorage
+    // Simpan token ke localStorage (tidak perlu encrypt AT & RT)
     localStorage.setItem('X-LANYA-AT', accessToken);
     localStorage.setItem('X-LANYA-RT', refreshToken);
-    localStorage.setItem('user', JSON.stringify(user));
+
+    // Encrypt user data sebelum simpan ke localStorage
+    const encryptedUser = encrypt(user);
+    localStorage.setItem('user', encryptedUser);
 
     // Simpan ke cookie juga untuk middleware
     setCookie('X-LANYA-AT', accessToken, 1 / 24); // 1 jam
     setCookie('X-LANYA-RT', refreshToken, 7); // 7 hari
-    setCookie('X-LANYA-USER', JSON.stringify(user), 7); // 7 hari - PENTING untuk middleware
+
+    // Encrypt user data sebelum simpan ke cookie
+    setCookie('X-LANYA-USER', encryptedUser, 7); // 7 hari - PENTING untuk middleware
 
     return user;
   } catch (error) {
@@ -124,15 +130,20 @@ const register = async (
 
     const {accessToken, refreshToken, user} = response.data.data;
 
-    // Simpan token ke localStorage
+    // Simpan token ke localStorage (tidak perlu encrypt AT & RT)
     localStorage.setItem('X-LANYA-AT', accessToken);
     localStorage.setItem('X-LANYA-RT', refreshToken);
-    localStorage.setItem('user', JSON.stringify(user));
+
+    // Encrypt user data sebelum simpan ke localStorage
+    const encryptedUser = encrypt(user);
+    localStorage.setItem('user', encryptedUser);
 
     // Simpan ke cookie juga untuk middleware
     setCookie('X-LANYA-AT', accessToken, 1 / 24); // 1 jam
     setCookie('X-LANYA-RT', refreshToken, 7); // 7 hari
-    setCookie('X-LANYA-USER', JSON.stringify(user), 7); // 7 hari - PENTING untuk middleware
+
+    // Encrypt user data sebelum simpan ke cookie
+    setCookie('X-LANYA-USER', encryptedUser, 7); // 7 hari - PENTING untuk middleware
 
     return user;
   } catch (error) {
