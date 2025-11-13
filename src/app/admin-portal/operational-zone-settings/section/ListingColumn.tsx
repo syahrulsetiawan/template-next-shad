@@ -1,10 +1,13 @@
 import { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
 
 type User = {
   id: number
   name: string
-  email: string
-  role: string
+  code: string
+  country: string
+  province: string
+  status?: string
 }
 
 export const userColumns: ColumnDef<User>[] = [
@@ -19,28 +22,37 @@ export const userColumns: ColumnDef<User>[] = [
     meta: { align: 'left' },
   },
   {
-    accessorKey: 'email',
-    header: 'Email',
+    accessorKey: 'code',
+    header: 'Code',
     meta: { align: 'left' },
   },
   {
-    accessorKey: 'role',
-    header: 'Peran',
+    accessorKey: 'country',
+    header: 'Negara',
     meta: { align: 'center' },
   },
   {
-    accessorKey: 'name',
-    header: 'Nama',
+    accessorKey: 'province',
+    header: 'Provinsi',
     meta: { align: 'left' },
   },
   {
-    accessorKey: 'email',
-    header: 'Email',
-    meta: { align: 'left' },
-  },
-  {
-    accessorKey: 'role',
-    header: 'Peran',
+    accessorKey: 'status',
+    header: 'Status',
     meta: { align: 'center' },
+    cell: ({ row }) => {
+      const status = row.getValue('status') as string
+      
+      // Tentukan variant badge berdasarkan status
+      const color = status === 'active' ? 'bg-teal-800 text-foreground' : 
+                    status === 'inactive' ? 'bg-destructive text-foreground' : 
+                    '' 
+      
+      return (
+        <Badge variant='default' className={color + " capitalize"}>
+          {status}
+        </Badge>
+      )
+    },
   },
 ]

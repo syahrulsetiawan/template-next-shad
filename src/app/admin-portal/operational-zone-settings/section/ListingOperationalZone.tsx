@@ -32,9 +32,9 @@ const actions: actionProps[] = [
 
 export default function ListingOperationalZone() {
   const data = [
-    { id: 1, name: 'Budi', email: 'budi@mail.com', role: 'Admin' },
-    { id: 2, name: 'Siti', email: 'siti@mail.com', role: 'Staff' },
-    { id: 3, name: 'Rudi', email: 'rudi@mail.com', role: 'Manager' },
+    { id: 1, name: 'Jawa Barat', code: 'B001', country: 'Indonesia', province: 'Jawa Barat', status: 'active' },
+    { id: 2, name: 'Jawa Tengah', code: 'S002', country: 'Indonesia', province: 'Jawa Tengah', status: 'inactive' },
+    { id: 3, name: 'Jawa Timur', code: 'R003', country: 'Indonesia', province: 'Jawa Timur', status: 'pending' },
   ]
 
   return (
