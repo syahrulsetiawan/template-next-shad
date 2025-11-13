@@ -1,7 +1,7 @@
 // src/types.ts
 
 export interface ILoginCredentials {
-  credentials: string;
+  usernameOrEmail: string;
   password: string;
   rememberMe?: boolean;
 }

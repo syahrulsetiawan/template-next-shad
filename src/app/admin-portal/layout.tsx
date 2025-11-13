@@ -17,8 +17,9 @@ import {NavigationMenuDemo} from '@/components/navbar';
 import {TeamSwitcher} from '@/components/layout/team-switcher';
 import {AudioWaveform, Command, GalleryVerticalEnd} from 'lucide-react';
 // import {MyNotification} from '@/components/Notification';
-import { AppSidebar } from './component/app-sidebar';
-import { NotificationDropdown } from '@/components/layout/MyNotification';
+import {AppSidebar} from './component/app-sidebar';
+import {NotificationDropdown} from '@/components/layout/MyNotification';
+import AuthGuard from '@/components/AuthGuard';
 
 const teams = [
   {
@@ -42,38 +43,40 @@ export default function AppLayout({children}: {children: ReactNode}) {
 
   return (
     <>
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-            <div className="w-full flex justify-between items-center">
-              <div className="flex items-center gap-2 px-4">
-                <SidebarTrigger className="-ml-1" />
-                <Separator
-                  orientation="vertical"
-                  className="mr-2 data-[orientation=vertical]:h-4"
-                />
-                <div className="hidden sm:block">
-                  <MyBreadcrumb />
+      <AuthGuard>
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+              <div className="w-full flex justify-between items-center">
+                <div className="flex items-center gap-2 px-4">
+                  <SidebarTrigger className="-ml-1" />
+                  <Separator
+                    orientation="vertical"
+                    className="mr-2 data-[orientation=vertical]:h-4"
+                  />
+                  <div className="hidden sm:block">
+                    <MyBreadcrumb />
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 px-4">
+                  <SearchPanel />
+                  <NotificationDropdown />
+                  <LocaleSwitcher />
+                  <UserSetting />
                 </div>
               </div>
-              <div className="flex items-center gap-2 px-4">
-                <SearchPanel />
-                <NotificationDropdown />
-                <LocaleSwitcher />
-                <UserSetting />
-              </div>
-            </div>
-          </header>
-          <div className="flex flex-col justify-start item-center gap-4 p-4 pt-0 ">
-            {/* <div className="block sm:hidden">
+            </header>
+            <div className="flex flex-col justify-start item-center gap-4 p-4 pt-0 ">
+              {/* <div className="block sm:hidden">
               <MyBreadcrumb />
             </div> */}
-            <main className=' '>{children}</main>
-          </div>
-          <Toaster richColors />
-        </SidebarInset>
-      </SidebarProvider>
+              <main className=" ">{children}</main>
+            </div>
+            <Toaster richColors />
+          </SidebarInset>
+        </SidebarProvider>
+      </AuthGuard>
     </>
   );
 }

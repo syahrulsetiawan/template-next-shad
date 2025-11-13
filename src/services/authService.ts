@@ -5,14 +5,20 @@ import {ILoginCredentials, IAuthRegisterCredentials} from '../types/types';
 import {UserData, LoginResponse, MeResponse} from '../types/UserTypes';
 import {AxiosResponse} from 'axios';
 import {handleAxiosError} from './handleAxiosError';
+import {encrypt, decrypt} from '@/helpers/encryption_helper';
 
-// Helper function untuk set cookie
+// Helper function untuk set cookie (selaras dengan middleware)
 const setCookie = (name: string, value: string, days: number) => {
   if (typeof document === 'undefined') return;
 
   const expires = new Date();
   expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+
+  // Match middleware settings: httpOnly=false, secure in production, SameSite=Lax
+  const isProduction = process.env.NODE_ENV === 'production';
+  const secureFlag = isProduction ? 'Secure;' : '';
+
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax;${secureFlag}`;
 };
 
 // Helper function untuk delete cookie
@@ -28,6 +34,7 @@ export const logout = (): void => {
   localStorage.removeItem('user');
   deleteCookie('X-LANYA-AT');
   deleteCookie('X-LANYA-RT');
+  deleteCookie('X-LANYA-USER');
   sessionStorage.clear();
   console.log('Logged out successfully.');
 
@@ -79,14 +86,20 @@ const login = async (credentials: ILoginCredentials): Promise<UserData> => {
 
     const {accessToken, refreshToken, user} = response.data.data;
 
-    // Simpan token ke localStorage
+    // Simpan token ke localStorage (tidak perlu encrypt AT & RT)
     localStorage.setItem('X-LANYA-AT', accessToken);
     localStorage.setItem('X-LANYA-RT', refreshToken);
-    localStorage.setItem('user', JSON.stringify(user));
+
+    // Encrypt user data sebelum simpan ke localStorage
+    const encryptedUser = encrypt(user);
+    localStorage.setItem('user', encryptedUser);
 
     // Simpan ke cookie juga untuk middleware
     setCookie('X-LANYA-AT', accessToken, 1 / 24); // 1 jam
     setCookie('X-LANYA-RT', refreshToken, 7); // 7 hari
+
+    // Encrypt user data sebelum simpan ke cookie
+    setCookie('X-LANYA-USER', encryptedUser, 7); // 7 hari - PENTING untuk middleware
 
     return user;
   } catch (error) {
@@ -117,14 +130,20 @@ const register = async (
 
     const {accessToken, refreshToken, user} = response.data.data;
 
-    // Simpan token ke localStorage
+    // Simpan token ke localStorage (tidak perlu encrypt AT & RT)
     localStorage.setItem('X-LANYA-AT', accessToken);
     localStorage.setItem('X-LANYA-RT', refreshToken);
-    localStorage.setItem('user', JSON.stringify(user));
+
+    // Encrypt user data sebelum simpan ke localStorage
+    const encryptedUser = encrypt(user);
+    localStorage.setItem('user', encryptedUser);
 
     // Simpan ke cookie juga untuk middleware
     setCookie('X-LANYA-AT', accessToken, 1 / 24); // 1 jam
     setCookie('X-LANYA-RT', refreshToken, 7); // 7 hari
+
+    // Encrypt user data sebelum simpan ke cookie
+    setCookie('X-LANYA-USER', encryptedUser, 7); // 7 hari - PENTING untuk middleware
 
     return user;
   } catch (error) {
