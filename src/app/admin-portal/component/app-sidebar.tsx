@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import * as React from 'react';
+import * as React from "react";
 import {
   AudioWaveform,
   BookOpen,
@@ -11,19 +11,19 @@ import {
   Map,
   PieChart,
   Settings2,
-  SquareTerminal
-} from 'lucide-react';
+  SquareTerminal,
+} from "lucide-react";
 
 import {
   AdminPortalPlatform,
   AdminPortalUserThings,
-  AdminPortalUserData
-} from '@/data/Menu';
+  AdminPortalUserData,
+} from "@/data/Menu";
 
-import {NavMain} from '@/components/nav-main';
-import {NavProjects} from '@/components/nav-projects';
-import {NavUser} from '@/components/nav-user';
-import {TeamSwitcher} from '@/components/layout/team-switcher';
+import { NavMain } from "@/components/nav-main";
+import { NavProjects } from "@/components/nav-projects";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/layout/team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -32,178 +32,178 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail
-} from '@/components/ui/sidebar';
-import {NavbarComponent} from './NavbarComponent';
-import {useUser} from '@/contexts/UserContext';
-import {decrypt} from '@/helpers/encryption_helper';
-import {UserData} from '@/types/UserTypes';
+  SidebarRail,
+} from "@/components/ui/sidebar";
+import { NavbarComponent } from "./NavbarComponent";
+import { useUser } from "@/contexts/UserContext";
+import { decrypt } from "@/helpers/encryption_helper";
+import { UserData } from "@/types/UserTypes";
 
 // This is sample data.
 const data = {
   user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg'
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: "/avatars/shadcn.jpg",
   },
   teams: [
     {
-      name: 'Acme Inc',
+      name: "Acme Inc",
       logo: GalleryVerticalEnd,
-      plan: 'Enterprise'
+      plan: "Enterprise",
     },
     {
-      name: 'Acme Corp.',
+      name: "Acme Corp.",
       logo: AudioWaveform,
-      plan: 'Startup'
+      plan: "Startup",
     },
     {
-      name: 'Evil Corp.',
+      name: "Evil Corp.",
       logo: Command,
-      plan: 'Free'
-    }
+      plan: "Free",
+    },
   ],
   navMain: [
     {
-      title: 'Dashboard',
-      url: '#',
-      icon: PieChart
+      title: "Dashboard",
+      url: "#",
+      icon: PieChart,
     },
     {
-      title: 'Playground',
-      url: '#',
+      title: "Playground",
+      url: "#",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: 'History',
-          url: '#'
+          title: "History",
+          url: "#",
         },
         {
-          title: 'Starred',
-          url: '#'
+          title: "Starred",
+          url: "#",
         },
         {
-          title: 'Settings',
-          url: '#'
-        }
-      ]
+          title: "Settings",
+          url: "#",
+        },
+      ],
     },
     {
-      title: 'Models',
-      url: '#',
+      title: "Models",
+      url: "#",
       icon: Bot,
       items: [
         {
-          title: 'Genesis',
-          url: '#'
+          title: "Genesis",
+          url: "#",
         },
         {
-          title: 'Explorer',
-          url: '#'
+          title: "Explorer",
+          url: "#",
         },
         {
-          title: 'Quantum',
-          url: '#'
-        }
-      ]
+          title: "Quantum",
+          url: "#",
+        },
+      ],
     },
     {
-      title: 'Documentation',
-      url: '#',
+      title: "Documentation",
+      url: "#",
       icon: BookOpen,
       items: [
         {
-          title: 'Introduction',
-          url: '#'
+          title: "Introduction",
+          url: "#",
         },
         {
-          title: 'Get Started',
-          url: '#'
+          title: "Get Started",
+          url: "#",
         },
         {
-          title: 'Tutorials',
-          url: '#'
+          title: "Tutorials",
+          url: "#",
         },
         {
-          title: 'Changelog',
-          url: '#'
-        }
-      ]
+          title: "Changelog",
+          url: "#",
+        },
+      ],
     },
     {
-      title: 'Settings',
-      url: '#',
+      title: "Settings",
+      url: "#",
       icon: Settings2,
       items: [
         {
-          title: 'General',
-          url: '#'
+          title: "General",
+          url: "#",
         },
         {
-          title: 'Company',
-          url: '#'
+          title: "Company",
+          url: "#",
         },
         {
-          title: 'Billing',
-          url: '#'
+          title: "Billing",
+          url: "#",
         },
         {
-          title: 'Limits',
-          url: '#'
-        }
-      ]
-    }
+          title: "Limits",
+          url: "#",
+        },
+      ],
+    },
   ],
   projects: [
     {
-      name: 'Design Engineering',
-      url: '#',
-      icon: Frame
+      name: "Design Engineering",
+      url: "#",
+      icon: Frame,
     },
     {
-      name: 'Sales & Marketing',
-      url: '#',
-      icon: PieChart
+      name: "Sales & Marketing",
+      url: "#",
+      icon: PieChart,
     },
     {
-      name: 'Travel',
-      url: '#',
-      icon: Map
-    }
-  ]
+      name: "Travel",
+      url: "#",
+      icon: Map,
+    },
+  ],
 };
 
-export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
-  const {dataUser} = useUser();
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { dataUser } = useUser();
   const userLoggedIn = {
-    name: dataUser?.name || 'Guest User',
-    email: dataUser?.email || 'guest@example.com'
+    name: dataUser?.name || "Guest User",
+    email: dataUser?.email || "guest@example.com",
   };
   // Debugging
   React.useEffect(() => {
-    console.log('[AppSidebar] dataUser:', dataUser);
+    console.log("[AppSidebar] dataUser:", dataUser);
 
     // Check cookie
     const getCookie = (name: string) => {
-      if (typeof document === 'undefined') return null;
+      if (typeof document === "undefined") return null;
       const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
       return match ? decodeURIComponent(match[2]) : null;
     };
 
-    const userCookie = getCookie('X-LANYA-USER');
+    const userCookie = getCookie("X-LANYA-USER");
     console.log(
-      '[AppSidebar] X-LANYA-USER cookie:',
-      userCookie ? 'EXISTS' : 'NOT FOUND'
+      "[AppSidebar] X-LANYA-USER cookie:",
+      userCookie ? "EXISTS" : "NOT FOUND"
     );
 
     if (userCookie) {
       try {
         // Decrypt cookie data karena sekarang sudah encrypted
         const parsed = decrypt<UserData>(userCookie);
-        console.log('[AppSidebar] Decrypted cookie data:', parsed);
+        console.log("[AppSidebar] Decrypted cookie data:", parsed);
       } catch (e) {
-        console.error('[AppSidebar] Failed to decrypt cookie:', e);
+        console.error("[AppSidebar] Failed to decrypt cookie:", e);
       }
     }
   }, [dataUser]);

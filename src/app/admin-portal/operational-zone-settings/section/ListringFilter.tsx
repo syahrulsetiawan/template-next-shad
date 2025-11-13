@@ -1,13 +1,13 @@
 import {
   DropdownMenu,
   DropdownMenuTrigger,
-  DropdownMenuContent,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Filter } from "lucide-react"
-import { Separator } from "@/components/ui/separator"
+  DropdownMenuContent
+} from '@/components/ui/dropdown-menu';
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {Label} from '@/components/ui/label';
+import {Filter} from 'lucide-react';
+import {Separator} from '@/components/ui/separator';
 
 export function ListingFilter() {
   return (
@@ -20,12 +20,7 @@ export function ListingFilter() {
       <DropdownMenuContent className="w-sm p-4" align="start">
         <div className="">
           <div className="mb-4 space-y-2">
-            <Label htmlFor="name">Nama Produk</Label>
-            <Input id="name" placeholder="Cari nama..." />
-          </div>
-
-          <div className="mb-4 space-y-2">
-            <Label htmlFor="category">Kategori</Label>
+            <Label htmlFor="category">Status</Label>
             <Input id="category" placeholder="Misal: pakan, obat..." />
           </div>
 
@@ -41,5 +36,5 @@ export function ListingFilter() {
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
