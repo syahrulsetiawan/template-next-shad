@@ -112,17 +112,22 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (err) {
         processQueue(err);
-        // Logout: hapus token dan redirect ke login
-        localStorage.removeItem('X-LANYA-AT');
-        localStorage.removeItem('X-LANYA-RT');
-        localStorage.removeItem('user');
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
-        }
+        // Import authService untuk logout yang proper (clear cookies + localStorage)
+        import('@/services/authService').then((module) => {
+          module.logout();
+        });
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
       }
+    }
+
+    // Jika 401 dan bukan dalam refresh flow, langsung logout
+    if (error.response?.status === 401) {
+      console.log('[AxiosInterceptor] 401 detected, logging out...');
+      import('@/services/authService').then((module) => {
+        module.logout();
+      });
     }
 
     return Promise.reject(error);

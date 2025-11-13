@@ -29,15 +29,24 @@ const deleteCookie = (name: string) => {
 
 // Kita pisahkan fungsi logout agar bisa diimpor secara langsung oleh interceptor
 export const logout = (): void => {
+  console.log('[AuthService] Logout initiated - clearing all auth data');
+
+  // Hapus semua dari localStorage
   localStorage.removeItem('X-LANYA-AT');
   localStorage.removeItem('X-LANYA-RT');
   localStorage.removeItem('user');
+
+  // Hapus semua cookies
   deleteCookie('X-LANYA-AT');
   deleteCookie('X-LANYA-RT');
   deleteCookie('X-LANYA-USER');
-  sessionStorage.clear();
-  console.log('Logged out successfully.');
 
+  // Clear session storage
+  sessionStorage.clear();
+
+  console.log('[AuthService] All tokens and cookies cleared');
+
+  // Redirect ke login
   if (typeof window !== 'undefined') {
     window.location.href = '/login';
   }

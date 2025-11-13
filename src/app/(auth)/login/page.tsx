@@ -123,11 +123,11 @@ export default function LoginPage() {
             <LocaleSwitcher />
           </div>
           <div className="flex flex-col items-center pb-12">
-            {theme === 'dark' || theme === 'system' ? (
+            {/* {theme === 'dark' || theme === 'system' ? (
               <LogoLight />
             ) : (
               <LogoDark />
-            )}
+            )} */}
             {/* <h5 className="text-lg text-foreground">{t('login')}</h5> */}
             <p className="text-muted-foreground mt-4 mb-8">
               {t('description')}
