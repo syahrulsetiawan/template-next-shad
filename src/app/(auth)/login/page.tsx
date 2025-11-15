@@ -94,10 +94,10 @@ export default function LoginPage() {
       // 4. Redirect ke halaman dashboard berdasarkan lastServiceKey
       const lastService = userData.lastServiceKey || 'admin-portal';
 
-      // Small delay to ensure cookies are set before redirect
+      // Longer delay to ensure cookies are fully persisted before redirect
       setTimeout(() => {
         router.replace(`/${lastService}`);
-      }, 100);
+      }, 300);
     } catch (err: any) {
       console.log(err);
       console.error('Login failed:', err);

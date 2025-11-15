@@ -12,28 +12,34 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import {ButtonGroup} from '../ui/button-group';
+import {useUserConfig} from '@/hooks/useUserConfig';
 
 export function ModeToggle() {
-  const {setTheme, theme} = useTheme();
+  const {theme} = useTheme();
+  const {updateConfig} = useUserConfig();
+
+  const toggleDarkMode = (mode: 'light' | 'dark' | 'by_system') => {
+    updateConfig({dark_mode: mode});
+  };
 
   return (
     <ButtonGroup>
       <Button
-        onClick={() => setTheme('light')}
+        onClick={() => toggleDarkMode('light')}
         disabled={theme === 'light'}
         variant={'outline'}
       >
         Light
       </Button>
       <Button
-        onClick={() => setTheme('dark')}
+        onClick={() => toggleDarkMode('dark')}
         disabled={theme === 'dark'}
         variant={'outline'}
       >
         Dark
       </Button>
       <Button
-        onClick={() => setTheme('system')}
+        onClick={() => toggleDarkMode('by_system')}
         disabled={theme === 'system'}
         variant={'outline'}
       >

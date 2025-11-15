@@ -11,6 +11,7 @@ import {useEffect} from 'react';
 import {toast} from 'sonner';
 import {Calendar} from '@/components/ui/calendar';
 import {Datepicker, Timepicker} from '@/components/custom/Datepicker';
+import authService from '@/services/authService';
 
 const images = [
   {src: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'},
@@ -31,6 +32,16 @@ export default function Page() {
     }, 2000);
     handleNotification();
   }, []);
+
+  const testGetMe = async () => {
+    try {
+      const response = await authService.myProfile();
+      const data = await response;
+      console.log('User data from /api/me:', data);
+    } catch (error) {
+      console.error('Error fetching /api/me:', error);
+    }
+  };
   return (
     <div className="">
       <MyFullLoadingPage isLoading={isLoading} />
@@ -38,7 +49,9 @@ export default function Page() {
         <div className="bg-muted/50 aspect-video rounded-xl p-4">
           <div className="grid gap-2">
             <div>
-              <Button size={'sm'}>Primary</Button>
+              <Button size={'sm'} onClick={testGetMe}>
+                Primary
+              </Button>
             </div>
 
             <AsyncSelect

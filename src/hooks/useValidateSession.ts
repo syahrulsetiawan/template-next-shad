@@ -4,6 +4,7 @@ import {useEffect, useRef} from 'react';
 import {useUser} from '@/contexts/UserContext';
 import api from '@/lib/api/axiosInstance';
 import {useRouter} from 'next/navigation';
+import Cookies from 'js-cookie';
 
 /**
  * Hook untuk validasi session dan sync user data dari /me endpoint
@@ -28,8 +29,8 @@ export function useValidateSession() {
 
     const validateSession = async () => {
       try {
-        // Cek apakah ada refresh token (minimal authenticated)
-        const refreshToken = localStorage.getItem('X-LANYA-RT');
+        // Cek apakah ada refresh token di cookie (bukan localStorage)
+        const refreshToken = Cookies.get('X-LANYA-RT');
         if (!refreshToken) {
           console.log(
             '[useValidateSession] No refresh token, skipping validation'
@@ -69,7 +70,8 @@ export function useValidateSession() {
       if (!hasValidated.current) return;
 
       try {
-        const refreshToken = localStorage.getItem('X-LANYA-RT');
+        // Cek refresh token dari cookie
+        const refreshToken = Cookies.get('X-LANYA-RT');
         if (!refreshToken) return;
 
         console.log('[useValidateSession] Window focused, revalidating...');

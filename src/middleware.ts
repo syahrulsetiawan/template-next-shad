@@ -96,6 +96,14 @@ export async function middleware(request: NextRequest) {
 
   // Ambil refresh token untuk cek apakah authenticated
   const refreshToken = request.cookies.get('X-LANYA-RT')?.value;
+  const accessToken = request.cookies.get('X-LANYA-AT')?.value;
+
+  console.log('[Middleware] Cookies check:', {
+    refreshToken: refreshToken ? 'EXISTS' : 'MISSING',
+    accessToken: accessToken ? 'EXISTS' : 'MISSING',
+    allCookies: Array.from(request.cookies.getAll()).map((c) => c.name)
+  });
+
   const isAuthenticated = !!refreshToken;
 
   // Jika sudah authenticated & mencoba akses PUBLIC_PATHS, redirect ke dashboard
@@ -133,141 +141,25 @@ export async function middleware(request: NextRequest) {
   // Jika sudah authenticated & akses halaman protected, validate token
   try {
     const accessToken = request.cookies.get('X-LANYA-AT')?.value;
-    const encryptedUserCookie = request.cookies.get('X-LANYA-USER')?.value;
 
-    console.log('[Middleware] Cookies check:', {
+    console.log('[Middleware] Token validation:', {
       hasAccessToken: !!accessToken,
-      hasUserCookie: !!encryptedUserCookie,
-      hasRefreshToken: !!refreshToken
+      hasRefreshToken: !!refreshToken,
+      isExpired: accessToken ? isTokenExpired(accessToken) : 'no-token'
     });
 
-    let currentAccessToken = accessToken;
-
-    // Detect page refresh (bukan navigation biasa)
-    // Page refresh akan punya Sec-Fetch-Mode: navigate dan Sec-Fetch-Site: none/same-origin
-    const isPageRefresh =
-      request.headers.get('sec-fetch-mode') === 'navigate' &&
-      (request.headers.get('sec-fetch-site') === 'none' ||
-        request.headers.get('sec-fetch-site') === 'same-origin');
-
     // 1. Jika token fresh & valid, langsung pass
-    // Session revocation akan di-handle oleh axios interceptor (401 global logout)
-    if (accessToken && encryptedUserCookie && !isTokenExpired(accessToken)) {
-      console.log('[Middleware] Fresh token detected, allowing access');
-
-      // Handle root path redirect
-      if (pathname === '/') {
-        try {
-          const userData = decryptData(encryptedUserCookie);
-          if (userData) {
-            const lastService = userData.lastServiceKey || 'admin-portal';
-            const url = request.nextUrl.clone();
-            url.pathname = `/${lastService}`;
-            return NextResponse.redirect(url);
-          }
-        } catch (e) {
-          console.error('[Middleware] Failed to decrypt user data:', e);
-        }
-      }
-
+    // User data ada di localStorage (client-side), middleware cuma validasi token
+    if (accessToken && !isTokenExpired(accessToken)) {
+      console.log('[Middleware] Valid token, allowing access');
       return NextResponse.next();
     }
 
-    // 2. Token expired atau tidak ada → refresh token
-    console.log(
-      '[Middleware] Token expired or missing, attempting refresh...',
-      {
-        hasAccessToken: !!accessToken,
-        hasUserCookie: !!encryptedUserCookie,
-        isExpired: accessToken ? isTokenExpired(accessToken) : 'no-token'
-      }
-    );
+    // 2. Token expired atau tidak ada → redirect ke login
+    // Biar axios interceptor yang handle refresh token saat user hit API
+    console.log('[Middleware] Token expired or missing, redirecting to login');
 
-    const refreshResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({refreshToken})
-      }
-    );
-
-    if (!refreshResponse.ok) {
-      throw new Error('Refresh token failed or expired');
-    }
-
-    const refreshData = await refreshResponse.json();
-    const {accessToken: newAccessToken, refreshToken: newRefreshToken} =
-      refreshData.data;
-
-    currentAccessToken = newAccessToken;
-
-    // 3. Setelah refresh, WAJIB validasi dengan /me
-    console.log('[Middleware] Token refreshed, validating with /me');
-    const meResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${newAccessToken}`
-        }
-      }
-    );
-
-    if (!meResponse.ok) {
-      console.error('[Middleware] /me validation failed after refresh');
-      throw new Error('Session invalid - login required');
-    }
-
-    const meData = await meResponse.json();
-    const userData = meData.data;
-
-    // 4. Update semua cookies
-    const response = NextResponse.next();
-
-    response.cookies.set('X-LANYA-AT', newAccessToken, {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 // 1 jam
-    });
-
-    response.cookies.set('X-LANYA-RT', newRefreshToken, {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 7 // 7 hari
-    });
-
-    const encryptedUserData = encryptData(userData);
-    response.cookies.set('X-LANYA-USER', encryptedUserData, {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 7 // 7 hari
-    });
-
-    // Handle root path redirect
-    if (pathname === '/') {
-      const lastService = userData.lastServiceKey || 'admin-portal';
-      const url = request.nextUrl.clone();
-      url.pathname = `/${lastService}`;
-      const redirectResponse = NextResponse.redirect(url);
-      redirectResponse.headers.set(
-        'X-Debug-Flow',
-        'token-refreshed-root-redirect'
-      );
-      return redirectResponse;
-    }
-
-    response.headers.set('X-Debug-Flow', 'token-refreshed-success');
-    return response;
+    throw new Error('Access token expired or missing');
   } catch (error) {
     console.error('[Middleware] Auth error:', error);
     console.error('[Middleware] Error details:', {
@@ -276,15 +168,17 @@ export async function middleware(request: NextRequest) {
       hasRefreshToken: !!refreshToken
     });
 
-    // Jika gagal, hapus cookies dan redirect ke login
+    // Jika gagal, redirect ke login TANPA delete cookies
+    // Biarkan client-side (axios interceptor) yang handle cleanup
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     url.searchParams.set('callbackUrl', pathname);
 
     const response = NextResponse.redirect(url);
-    response.cookies.delete('X-LANYA-AT');
-    response.cookies.delete('X-LANYA-RT');
-    response.cookies.delete('X-LANYA-USER');
+    // JANGAN delete cookies di sini - bisa race condition dengan client-side yang baru set
+    // response.cookies.delete('X-LANYA-AT');
+    // response.cookies.delete('X-LANYA-RT');
+    // response.cookies.delete('X-LANYA-USER');
     response.headers.set('X-Debug-Reason', 'auth-error');
     response.headers.set(
       'X-Debug-Error',

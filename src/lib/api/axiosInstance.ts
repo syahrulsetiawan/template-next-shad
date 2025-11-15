@@ -4,6 +4,7 @@ import axios, {
   AxiosHeaders,
   InternalAxiosRequestConfig
 } from 'axios';
+import Cookies from 'js-cookie';
 
 // Tambahkan tipe tambahan
 interface ExtendedAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -41,10 +42,11 @@ const api: AxiosInstance = axios.create({
 // =========================
 api.interceptors.request.use(
   (config: ExtendedAxiosRequestConfig) => {
-    // Tambahkan Bearer Token dari localStorage kalau withAuth = true
+    // Tambahkan Bearer Token dari cookie kalau withAuth = true
     if (config.withAuth !== false) {
       // Default true kecuali explicitly false
-      const token = localStorage.getItem('X-LANYA-AT');
+      // Get token dari cookie (bukan localStorage)
+      const token = Cookies.get('X-LANYA-AT');
       if (token) {
         config.headers = config.headers || {};
         (config.headers as AxiosHeaders).Authorization = `Bearer ${token}`;
@@ -87,7 +89,8 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const refreshToken = localStorage.getItem('X-LANYA-RT');
+        // Get refresh token dari cookie (bukan localStorage)
+        const refreshToken = Cookies.get('X-LANYA-RT');
         if (!refreshToken) {
           throw new Error('No refresh token available');
         }
@@ -98,11 +101,13 @@ api.interceptors.response.use(
           {refreshToken}
         );
 
+        console.log(response);
+
         const {accessToken, refreshToken: newRefreshToken} = response.data.data;
 
-        // Simpan token baru
-        localStorage.setItem('X-LANYA-AT', accessToken);
-        localStorage.setItem('X-LANYA-RT', newRefreshToken);
+        // Simpan token baru ke cookie (bukan localStorage)
+        Cookies.set('X-LANYA-AT', accessToken, {expires: 1 / 24, path: '/'});
+        Cookies.set('X-LANYA-RT', newRefreshToken, {expires: 7, path: '/'});
 
         processQueue(null, accessToken);
 

@@ -6,9 +6,10 @@ import {UserData, UserTenant, UserConfig} from '../types/UserTypes';
 interface UserContextType {
   dataUser: UserData | null;
   tenants: UserTenant[];
-  userConfigs: UserConfig[];
+  userConfig: UserConfig | null;
   setAllData: (data: UserData) => void;
   clearAllData: () => void;
+  updateUserConfig: (config: Partial<UserConfig>) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -16,19 +17,25 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({children}: {children: ReactNode}) {
   const [dataUser, setDataUser] = useState<UserData | null>(null);
   const [tenants, setTenants] = useState<UserTenant[]>([]);
-  const [userConfigs, setUserConfigs] = useState<UserConfig[]>([]);
+  const [userConfig, setUserConfig] = useState<UserConfig | null>(null);
 
   const setAllData = (data: UserData) => {
     console.log('[UserContext] Setting user data:', data);
     setDataUser(data);
-    setUserConfigs(data.userConfigs || []);
     setTenants(data.tenants || []);
+    // Support both user_config (from /me) and userConfigs (legacy)
+    setUserConfig(data.user_config || null);
+  };
+
+  const updateUserConfig = (config: Partial<UserConfig>) => {
+    console.log('[UserContext] Updating user config:', config);
+    setUserConfig((prev) => (prev ? {...prev, ...config} : null));
   };
 
   const clearAllData = () => {
     console.log('[UserContext] Clearing user data');
     setDataUser(null);
-    setUserConfigs([]);
+    setUserConfig(null);
     setTenants([]);
   };
 
@@ -37,9 +44,10 @@ export function UserProvider({children}: {children: ReactNode}) {
       value={{
         dataUser,
         tenants,
-        userConfigs,
+        userConfig,
         setAllData,
-        clearAllData
+        clearAllData,
+        updateUserConfig
       }}
     >
       {children}

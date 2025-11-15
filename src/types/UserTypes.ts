@@ -2,9 +2,12 @@
 
 /** Tipe untuk konfigurasi pengguna (dark_mode, language, dll.) */
 export interface UserConfig {
-  id: string;
-  configKey: string;
-  configValue: string;
+  rtl: boolean;
+  language: string;
+  content_width: 'full' | 'boxed';
+  dark_mode: 'light' | 'dark' | 'by_system';
+  email_notifications: boolean;
+  menu_layout: 'vertical' | 'horizontal';
 }
 
 /** Tipe untuk konfigurasi tenant */
@@ -56,8 +59,10 @@ export interface UserData {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  userConfigs: UserConfig[];
+  user_config?: UserConfig; // From /me endpoint
+  userConfigs?: UserConfig[]; // Legacy support
   tenants: UserTenant[];
+  detailCurrentTenant?: any; // Add if needed
 }
 
 /** Tipe untuk response login */
@@ -78,4 +83,13 @@ export interface MeResponse {
   success: boolean;
   data: UserData;
   timestamp: string;
+}
+
+export interface userConfigRequest {
+  rtl: boolean;
+  language: 'id' | 'en';
+  content_width: 'full' | 'compact';
+  dark_mode: 'light' | 'dark' | 'by_system';
+  email_notifications: boolean;
+  menu_layout: 'vertical' | 'horizontal';
 }

@@ -6,40 +6,22 @@ import {UserData, LoginResponse, MeResponse} from '../types/UserTypes';
 import {AxiosResponse} from 'axios';
 import {handleAxiosError} from './handleAxiosError';
 import {encrypt, decrypt} from '@/helpers/encryption_helper';
-
-// Helper function untuk set cookie (selaras dengan middleware)
-const setCookie = (name: string, value: string, days: number) => {
-  if (typeof document === 'undefined') return;
-
-  const expires = new Date();
-  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-
-  // Match middleware settings: httpOnly=false, secure in production, SameSite=Lax
-  const isProduction = process.env.NODE_ENV === 'production';
-  const secureFlag = isProduction ? 'Secure;' : '';
-
-  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax;${secureFlag}`;
-};
-
-// Helper function untuk delete cookie
-const deleteCookie = (name: string) => {
-  if (typeof document === 'undefined') return;
-  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
-};
+import Cookies from 'js-cookie';
 
 // Kita pisahkan fungsi logout agar bisa diimpor secara langsung oleh interceptor
 export const logout = (): void => {
+  const response = api.post('/auth/logout').catch((err) => {
+    console.error('[AuthService] Logout API call failed:', err);
+  });
+
   console.log('[AuthService] Logout initiated - clearing all auth data');
 
-  // Hapus semua dari localStorage
-  localStorage.removeItem('X-LANYA-AT');
-  localStorage.removeItem('X-LANYA-RT');
-  localStorage.removeItem('user');
+  // Hapus semua dari localStorage (hanya user data)
+  localStorage.removeItem('X-LANYA-USER');
 
-  // Hapus semua cookies
-  deleteCookie('X-LANYA-AT');
-  deleteCookie('X-LANYA-RT');
-  deleteCookie('X-LANYA-USER');
+  // Hapus semua cookies (tokens)
+  Cookies.remove('X-LANYA-AT', {path: '/'});
+  Cookies.remove('X-LANYA-RT', {path: '/'});
 
   // Clear session storage
   sessionStorage.clear();
@@ -55,10 +37,13 @@ export const logout = (): void => {
 // Kita pisahkan fungsi refreshToken agar bisa diimpor secara langsung oleh interceptor
 export const refreshToken = async (): Promise<string> => {
   try {
-    const refreshTokenValue = localStorage.getItem('X-LANYA-RT');
+    // Get refresh token dari cookie (bukan localStorage)
+    const refreshTokenValue = Cookies.get('X-LANYA-RT');
     if (!refreshTokenValue) {
       throw new Error('No refresh token available');
     }
+
+    console.log('[AuthService] Refreshing token...');
 
     const response: AxiosResponse<{
       success: boolean;
@@ -69,16 +54,39 @@ export const refreshToken = async (): Promise<string> => {
 
     const {accessToken, refreshToken: newRefreshToken} = response.data.data;
 
-    // Simpan ke localStorage
-    localStorage.setItem('X-LANYA-AT', accessToken);
-    localStorage.setItem('X-LANYA-RT', newRefreshToken);
+    // Simpan tokens ke cookie (bukan localStorage)
+    Cookies.set('X-LANYA-AT', accessToken, {expires: 1 / 24, path: '/'});
+    Cookies.set('X-LANYA-RT', newRefreshToken, {expires: 7, path: '/'});
 
-    // Simpan ke cookie juga untuk middleware
-    setCookie('X-LANYA-AT', accessToken, 1 / 24); // 1 jam
-    setCookie('X-LANYA-RT', newRefreshToken, 7); // 7 hari
+    console.log('[AuthService] Token refreshed successfully');
+
+    // Fetch user data terbaru dari /me dan update localStorage (bukan cookie)
+    try {
+      const meResponse: AxiosResponse<{
+        success: boolean;
+        data: UserData;
+      }> = await api.get('/auth/me');
+
+      const userData = meResponse.data.data;
+
+      // Encrypt dan simpan user data ke localStorage (bukan cookie - terlalu besar)
+      const encryptedUser = encrypt(userData);
+      localStorage.setItem('X-LANYA-USER', encryptedUser);
+
+      console.log(
+        '[AuthService] User data synced to localStorage after refresh'
+      );
+    } catch (meError) {
+      console.warn(
+        '[AuthService] Failed to sync user data after refresh:',
+        meError
+      );
+      // Don't throw - refresh token already succeeded
+    }
 
     return accessToken;
   } catch (error) {
+    console.error('[AuthService] Token refresh failed:', error);
     logout();
     throw error;
   }
@@ -95,20 +103,23 @@ const login = async (credentials: ILoginCredentials): Promise<UserData> => {
 
     const {accessToken, refreshToken, user} = response.data.data;
 
-    // Simpan token ke localStorage (tidak perlu encrypt AT & RT)
-    localStorage.setItem('X-LANYA-AT', accessToken);
-    localStorage.setItem('X-LANYA-RT', refreshToken);
+    // Simpan tokens ke cookie (untuk middleware)
+    Cookies.set('X-LANYA-AT', accessToken, {expires: 1 / 24, path: '/'});
+    Cookies.set('X-LANYA-RT', refreshToken, {expires: 7, path: '/'});
 
-    // Encrypt user data sebelum simpan ke localStorage
+    console.log('[AuthService] Login - Cookies set:', {
+      AT: Cookies.get('X-LANYA-AT') ? 'SET' : 'FAILED',
+      RT: Cookies.get('X-LANYA-RT') ? 'SET' : 'FAILED',
+      allCookies: document.cookie
+    });
+
+    // Encrypt user data dan simpan ke localStorage dengan key X-LANYA-USER
     const encryptedUser = encrypt(user);
-    localStorage.setItem('user', encryptedUser);
+    localStorage.setItem('X-LANYA-USER', encryptedUser);
 
-    // Simpan ke cookie juga untuk middleware
-    setCookie('X-LANYA-AT', accessToken, 1 / 24); // 1 jam
-    setCookie('X-LANYA-RT', refreshToken, 7); // 7 hari
-
-    // Encrypt user data sebelum simpan ke cookie
-    setCookie('X-LANYA-USER', encryptedUser, 7); // 7 hari - PENTING untuk middleware
+    console.log(
+      '[AuthService] Login successful - tokens saved to cookies, user data to localStorage'
+    );
 
     return user;
   } catch (error) {
@@ -139,20 +150,15 @@ const register = async (
 
     const {accessToken, refreshToken, user} = response.data.data;
 
-    // Simpan token ke localStorage (tidak perlu encrypt AT & RT)
-    localStorage.setItem('X-LANYA-AT', accessToken);
-    localStorage.setItem('X-LANYA-RT', refreshToken);
+    // Simpan tokens ke cookie (untuk middleware)
+    Cookies.set('X-LANYA-AT', accessToken, {expires: 1 / 24, path: '/'});
+    Cookies.set('X-LANYA-RT', refreshToken, {expires: 7, path: '/'});
 
-    // Encrypt user data sebelum simpan ke localStorage
+    // Encrypt user data dan simpan ke localStorage dengan key X-LANYA-USER
     const encryptedUser = encrypt(user);
-    localStorage.setItem('user', encryptedUser);
+    localStorage.setItem('X-LANYA-USER', encryptedUser);
 
-    // Simpan ke cookie juga untuk middleware
-    setCookie('X-LANYA-AT', accessToken, 1 / 24); // 1 jam
-    setCookie('X-LANYA-RT', refreshToken, 7); // 7 hari
-
-    // Encrypt user data sebelum simpan ke cookie
-    setCookie('X-LANYA-USER', encryptedUser, 7); // 7 hari - PENTING untuk middleware
+    console.log('[AuthService] Registration successful - tokens saved');
 
     return user;
   } catch (error) {
